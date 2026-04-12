@@ -1,3 +1,6 @@
+# cleantrack_3.0
+Plataforma de gestão para estética automotiva desenvolvida no Projeto Integrador III (UNIVESP).
+
 # CleanTrack 3.0 - Protótipo Navegável
 
 Este é um protótipo navegável de alta fidelidade desenvolvido para a aplicação **CleanTrack 3.0**, um sistema de gestão voltado para empresas de estética automotiva. O projeto foi construído seguindo uma abordagem **Mobile First**, com foco em fidelidade visual, usabilidade e facilidade de demonstração.
