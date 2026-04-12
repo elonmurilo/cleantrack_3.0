@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CleanTrack 3.0 - Gestão Estética Automotiva</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+        <div class="login-content">
+            <div class="login-header">
+                <p class="welcome-text">Bem-vindo ao</p>
+                <div class="logo-container">
+                    <img src="https://img.icons8.com/isometric/200/car.png" alt="CleanTrack Logo" class="logo-placeholder" style="filter: brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(10deg);">
+                    <h1 class="logo-text">CleanTrack <span>3.0</span></h1>
+                </div>
+            </div>
+            <form id="login-form" class="login-form">
+                <div class="input-group">
+                    <i class="fa-regular fa-envelope"></i>
+                    <input type="email" placeholder="E-mail" value="contato@cleantrack.com" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" placeholder="Senha" value="123456" required>
+                </div>
+                <button type="submit" class="btn-primary-gold">Entrar</button>
+            </form>
+        </div>
+        <div class="login-footer-decoration"></div>
+    </div>
+
+    <!-- App Shell -->
+    <div id="app-shell" class="screen hidden">
+        <header class="app-header">
+            <button id="menu-toggle" class="btn-icon">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <h2 id="page-title">Home</h2>
+            <div class="user-profile">
+                <span id="user-initials">A</span>
+            </div>
+        </header>
+
+        <nav id="floating-menu" class="hidden">
+            <ul>
+                <li class="active" data-view="home">Home</li>
+                <li data-view="clientes">Clientes</li>
+                <li data-view="servicos">Serviços</li>
+                <li data-view="faturamento">Faturamento</li>
+                <li id="logout-btn" class="logout-item"><i class="fa-solid fa-right-from-bracket"></i> Sair</li>
+            </ul>
+        </nav>
+
+        <main id="main-content">
+            <!-- Content will be injected here by app.js -->
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
