@@ -59,16 +59,17 @@ body {
     align-items: center;
 }
 
-.logo-placeholder {
-    width: 120px;
+.app-logo {
+    width: 210px;
     height: auto;
-    margin-bottom: 1rem;
+    margin-bottom: -22px; /* Pulls text up significantly */
 }
 
 .logo-text {
     color: var(--white);
     font-size: 2.5rem;
     font-weight: 700;
+    margin-top: 5px; /* Fine-tuning */
 }
 
 .logo-text span {

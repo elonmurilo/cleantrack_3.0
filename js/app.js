@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const init = () => {
         // Set user data
         userInitials.textContent = mockData.currentUser.avatarInitial;
-        
+
         // Setup Login
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -38,18 +38,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Navigation
         menuItems.forEach(item => {
-            item.addEventListener('click', () => {
+            item.addEventListener('click', (e) => {
                 const view = item.getAttribute('data-view');
-                navigateTo(view);
-                
-                // Update active class
-                menuItems.forEach(mi => mi.classList.remove('active'));
-                item.classList.add('active');
+                if (view) {
+                    navigateTo(view);
+
+                    // Update active class
+                    menuItems.forEach(mi => mi.classList.remove('active'));
+                    item.classList.add('active');
+                }
             });
         });
 
         // Setup Logout
-        logoutBtn.addEventListener('click', () => {
+        logoutBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             handleLogout();
         });
     };
@@ -72,14 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const handleLogout = () => {
-        if (confirm('Deseja realmente sair?')) {
-            appShell.classList.add('hidden');
-            loginScreen.classList.remove('hidden');
-            floatingMenu.classList.add('hidden');
-            
-            // Reset menu selection
-            menuItems.forEach(mi => mi.classList.remove('active'));
-            document.querySelector('[data-view="home"]').classList.add('active');
+        const result = window.confirm('Deseja realmente sair?');
+        if (result) {
+            window.location.href = "./index.html";
         }
     };
 
@@ -117,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // View Renderers
     const renderHome = () => {
         const { summary, clients } = mockData;
-        
+
         const html = `
             <div class="dashboard-grid">
                 <div class="card">
