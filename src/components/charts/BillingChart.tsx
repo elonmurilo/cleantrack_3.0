@@ -41,7 +41,7 @@ const BillingChart: React.FC<BillingChartProps> = ({ data }) => {
           </div>
         ))}
       </div>
-      <div className="chart-y-label" style={{ fontSize: '0.6rem', color: '#999', marginStep: '1.5rem' }}>
+      <div className="chart-y-label" style={{ fontSize: '0.6rem', color: '#999', marginTop: '1.5rem' }}>
         Valor (R$ Milhões)
       </div>
       

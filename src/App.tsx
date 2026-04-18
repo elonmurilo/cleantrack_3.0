@@ -10,7 +10,6 @@ import Billing from './pages/Billing';
 // Importando estilos globais
 import './styles/variables.css';
 import './styles/global.css';
-import './App.css';
 
 function App() {
   return (
