@@ -1,56 +1,46 @@
-# cleantrack_3.0
-Plataforma de gestão para estética automotiva desenvolvida no Projeto Integrador III (UNIVESP).
+# Getting Started with Create React App
 
-# CleanTrack 3.0 - Protótipo Navegável
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-Este é um protótipo navegável de alta fidelidade desenvolvido para a aplicação **CleanTrack 3.0**, um sistema de gestão voltado para empresas de estética automotiva. O projeto foi construído seguindo uma abordagem **Mobile First**, com foco em fidelidade visual, usabilidade e facilidade de demonstração.
+## Available Scripts
 
-## 🚀 Objetivo do Protótipo
+In the project directory, you can run:
 
-O foco deste material é apresentar a experiência do usuário (UX) e a interface (UI) planejadas para o MVP do sistema, simulando interações reais sem a necessidade de um backend ou banco de dados.
+### `npm start`
 
-## 🛠️ Stack Utilizada
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-- **HTML5**: Estrutura semântica das páginas.
-- **CSS3 (Vanilla)**: Design responsivo, variáveis CSS para temas e animações suaves.
-- **JavaScript (Vanilla)**: Lógica de Single Page Application (SPA), roteamento simples, manipulação de dados mockados e interações no gráfico.
-- **Google Fonts (Outfit)**: Tipografia moderna e premium.
-- **Font Awesome**: Ícones vetoriais.
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 
-## 📂 Estrutura de Pastas
+### `npm test`
 
-```text
-/cleantrack-prototipo
-  /assets
-    /images    # Imagens e logotipos
-    /icons     # Ícones personalizados (se aplicável)
-  /css
-    variables.css # Tokens de design (cores, fontes, sombras)
-    style.css     # Estilos globais e componentes
-  /js
-    data.js    # Dados mockados (clientes, serviços, faturamento)
-    app.js     # Lógica da SPA, roteamento e interações
-  index.html   # Ponto de entrada único
-  README.md    # Documentação
-```
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-## ⚙️ Como Executar Localmente
+### `npm run build`
 
-Como o projeto é estático, você pode executá-lo de forma simples:
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-1.  Clone este repositório ou baixe os arquivos.
-2.  Abra o arquivo `index.html` diretamente no seu navegador.
-3.  **Para uma melhor experiência (opcional)**: Use uma extensão de "Live Server" (como a do VS Code) ou um servidor HTTP simples (ex: `python -m http.server`).
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-## 📱 Funcionalidades Demonstradas
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-- **Login**: Simulação de entrada com transição suave.
-- **Dashboard**: Visão geral com cards de indicadores e clientes recentes.
-- **Gestão de Clientes**: Lista completa de clientes com status e ação de agendamento.
-- **Serviços do Dia**: Cronograma de serviços com horários e tipos de lavagem.
-- **Faturamento**: Gráfico interativo que exibe projeções e comparativos mensais.
-- **Navegação SPA**: Troca de telas instantânea via menu flutuante.
+### `npm run eject`
 
----
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-*Nota: Este é um protótipo visual. Nenhuma informação é persistida em banco de dados.*
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
