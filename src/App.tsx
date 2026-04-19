@@ -6,6 +6,8 @@ import Dashboard from './pages/Dashboard';
 import Clients from './pages/Clients';
 import ServicesPage from './pages/Services';
 import Billing from './pages/Billing';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './routes/ProtectedRoute';
 
 // Importando estilos globais
 import './styles/variables.css';
@@ -14,20 +16,24 @@ import './styles/global.css';
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        
-        <Route path="/" element={<AppShell />}>
-          <Route index element={<Navigate to="/dashboard" replace />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="clientes" element={<Clients />} />
-          <Route path="servicos" element={<ServicesPage />} />
-          <Route path="faturamento" element={<Billing />} />
-        </Route>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<AppShell />}>
+              <Route index element={<Navigate to="/dashboard" replace />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="clientes" element={<Clients />} />
+              <Route path="servicos" element={<ServicesPage />} />
+              <Route path="faturamento" element={<Billing />} />
+            </Route>
+          </Route>
 
-        {/* Fallback para login */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
+          {/* Fallback para login */}
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </AuthProvider>
     </Router>
   );
 }

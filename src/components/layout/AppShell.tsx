@@ -2,23 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Navigation from './Navigation';
-import { authService } from '../../services/authService';
-import { User } from '../../types';
+import { useAuth } from '../../hooks/useAuth';
 
 const AppShell: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const { profile, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const currentUser = authService.getCurrentUser();
-    if (!currentUser) {
-      navigate('/login');
-    } else {
-      setUser(currentUser);
-    }
-  }, [navigate]);
 
   useEffect(() => {
     // Esconder menu ao mudar de rota
@@ -27,7 +17,7 @@ const AppShell: React.FC = () => {
 
   const getPageTitle = () => {
     const path = location.pathname;
-    if (path.includes('dashboard')) return `Olá, ${user?.name || ''}`;
+    if (path.includes('dashboard')) return `Olá, ${profile?.nome || ''}`;
     if (path.includes('clientes')) return 'Clientes';
     if (path.includes('servicos')) return 'Serviços';
     if (path.includes('faturamento')) return 'Faturamento';
@@ -41,8 +31,12 @@ const AppShell: React.FC = () => {
 
   const handleLogout = async () => {
     if (window.confirm('Deseja realmente sair?')) {
-      await authService.logout();
-      navigate('/login');
+      try {
+        await signOut();
+        navigate('/login');
+      } catch (error) {
+        console.error('Erro ao sair:', error);
+      }
     }
   };
 
@@ -52,11 +46,19 @@ const AppShell: React.FC = () => {
     return () => document.removeEventListener('click', closeMenu);
   }, []);
 
+  // Adaptamos o objeto de usuário para o componente Header que espera User | null (baseado no mock anterior)
+  // Como mudamos os tipos, precisamos garantir que o Header receba o que espera ou atualizar o Header.
+  const headerUser = profile ? {
+    name: profile.nome,
+    role: profile.papel,
+    avatarInitial: profile.nome.charAt(0).toUpperCase()
+  } : null;
+
   return (
     <div id="app-shell" className="screen">
       <Header 
         title={getPageTitle()} 
-        user={user} 
+        user={headerUser} 
         onMenuToggle={handleMenuToggle} 
       />
       

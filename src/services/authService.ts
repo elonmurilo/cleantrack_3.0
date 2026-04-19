@@ -1,25 +1,64 @@
-import { mockData } from '../data/mockData';
-import { User } from '../types';
+import { supabase } from '../lib/supabase';
+import { UserProfile } from '../types/user';
+import { AuthError, Session, User } from '@supabase/supabase-js';
 
 export const authService = {
-  login: async (email: string, password: string): Promise<User> => {
-    // Simular delay de rede
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    // Simular validação básica
-    if (email === "contato@cleantrack.com" && password === "123456") {
-      return mockData.currentUser;
+  /**
+   * Realiza login com email e senha
+   */
+  signIn: async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) throw error;
+    return data;
+  },
+
+  /**
+   * Realiza logout
+   */
+  signOut: async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
+  },
+
+  /**
+   * Obtém a sessão atual
+   */
+  getSession: async (): Promise<Session | null> => {
+    const { data: { session }, error } = await supabase.auth.getSession();
+    if (error) throw error;
+    return session;
+  },
+
+  /**
+   * Obtém o perfil do usuário na tabela pública 'usuarios'
+   */
+  getUserProfile: async (userId: string): Promise<UserProfile | null> => {
+    const { data, error } = await supabase
+      .from('usuarios')
+      .select('*')
+      .eq('id', userId)
+      .single();
+
+    if (error) {
+      console.error('Erro ao buscar perfil:', error.message);
+      return null;
     }
-    throw new Error("Credenciais inválidas");
+
+    return data as UserProfile;
   },
 
-  getCurrentUser: (): User | null => {
-    // Para o MVP inicial, podemos retornar o usuário do mock
-    return mockData.currentUser;
-  },
+  /**
+   * Listener para mudanças no estado de autenticação
+   */
+  onAuthStateChange: (callback: (session: Session | null) => void) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      callback(session);
+    });
 
-  logout: async (): Promise<void> => {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    // Lógica de logout futuramente com Supabase
+    return subscription;
   }
 };

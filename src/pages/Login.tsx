@@ -1,28 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock } from 'lucide-react';
-import { authService } from '../services/authService';
+import { useAuth } from '../hooks/useAuth';
 import Button from '../components/common/Button';
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState('contato@cleantrack.com');
-  const [password, setPassword] = useState('123456');
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [localLoading, setLocalLoading] = useState(false);
   const [error, setError] = useState('');
+  
+  const { signIn, session, profile, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+
+  // Se já estiver logado e com perfil ativo, redireciona para o dashboard
+  useEffect(() => {
+    if (!authLoading && session && profile?.ativo) {
+      navigate('/dashboard');
+    }
+  }, [session, profile, authLoading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setLocalLoading(true);
     setError('');
 
     try {
-      await authService.login(email, password);
-      navigate('/dashboard');
-    } catch (err) {
-      setError('Credenciais inválidas. Tente contato@cleantrack.com / 123456');
+      await signIn(email, password);
+      // O redirecionamento acontecerá via useEffect após o estado de auth atualizar
+    } catch (err: any) {
+      console.error('Login error:', err);
+      if (err.message === 'Invalid login credentials') {
+        setError('E-mail ou senha incorretos.');
+      } else {
+        setError('Ocorreu um erro ao tentar entrar. Verifique sua conexão.');
+      }
     } finally {
-      setLoading(false);
+      setLocalLoading(false);
     }
   };
 
@@ -46,6 +60,7 @@ const Login: React.FC = () => {
               value={email} 
               onChange={(e) => setEmail(e.target.value)}
               required 
+              disabled={localLoading || authLoading}
             />
           </div>
           <div className="input-group">
@@ -56,13 +71,14 @@ const Login: React.FC = () => {
               value={password} 
               onChange={(e) => setPassword(e.target.value)}
               required 
+              disabled={localLoading || authLoading}
             />
           </div>
           
           {error && <p style={{ color: '#ff4d4d', fontSize: '0.8rem', marginBottom: '1rem', textAlign: 'center' }}>{error}</p>}
           
-          <Button type="submit" disabled={loading}>
-            {loading ? 'Carregando...' : 'Entrar'}
+          <Button type="submit" disabled={localLoading || authLoading}>
+            {localLoading || authLoading ? 'Carregando...' : 'Entrar'}
           </Button>
         </form>
       </div>
