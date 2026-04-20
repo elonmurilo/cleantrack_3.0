@@ -5,11 +5,12 @@ import Avatar from '../components/common/Avatar';
 import Button from '../components/common/Button';
 import { financialService } from '../services/financialService';
 import { clientService } from '../services/clientService';
-import { Summary, Client } from '../types';
+import { Summary } from '../types';
+import { Cliente } from '../types/client';
 
 const Dashboard: React.FC = () => {
   const [summary, setSummary] = useState<Summary | null>(null);
-  const [recentClients, setRecentClients] = useState<Client[]>([]);
+  const [recentClients, setRecentClients] = useState<Cliente[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,6 +30,15 @@ const Dashboard: React.FC = () => {
     };
     fetchData();
   }, []);
+
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .substring(0, 2)
+      .toUpperCase();
+  };
 
   if (loading || !summary) {
     return <div className="loading-container">Carregando painel...</div>;
@@ -67,15 +77,18 @@ const Dashboard: React.FC = () => {
       <div className="list-container">
         {recentClients.map(client => (
           <div key={client.id} className="list-item">
-            <Avatar initials={client.initials} color={client.color} />
+            <Avatar 
+              initials={getInitials(client.nome)} 
+              color="#EBB43F" 
+            />
             <div className="item-details">
-              <span className="item-name">{client.name}</span>
-              <span className="item-subtext">{client.vehicle}</span>
-              <span className="item-subtext">{client.lastVisit}</span>
+              <span className="item-name">{client.nome}</span>
+              <span className="item-subtext">{client.telefone}</span>
+              <span className="item-subtext">{client.email || 'Sem e-mail'}</span>
             </div>
             <Button 
               variant="action" 
-              onClick={() => alert(`Agendando para ${client.name}...`)}
+              onClick={() => alert(`Agendando para ${client.nome}...`)}
             >
               Agendar <ChevronRight size={14} />
             </Button>
