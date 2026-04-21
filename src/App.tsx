@@ -4,7 +4,7 @@ import AppShell from './components/layout/AppShell';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Clients from './pages/Clients';
-import ServicesPage from './pages/Services';
+import AppointmentsPage from './pages/appointments/AppointmentsPage';
 import Billing from './pages/Billing';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './routes/ProtectedRoute';
@@ -25,7 +25,7 @@ function App() {
               <Route index element={<Navigate to="/dashboard" replace />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="clientes" element={<Clients />} />
-              <Route path="servicos" element={<ServicesPage />} />
+              <Route path="agendamentos" element={<AppointmentsPage />} />
               <Route path="faturamento" element={<Billing />} />
             </Route>
           </Route>

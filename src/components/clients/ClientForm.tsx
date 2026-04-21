@@ -85,16 +85,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ client, onSubmit, onCancel, loa
             placeholder="Observações" 
             value={formData.observacoes}
             onChange={e => setFormData({ ...formData, observacoes: e.target.value })}
-            style={{ 
-              background: 'none', 
-              border: 'none', 
-              color: 'var(--white)', 
-              width: '100%', 
-              minHeight: '80px',
-              outline: 'none',
-              fontFamily: 'inherit',
-              padding: '0.5rem 0'
-            }}
+            style={{ minHeight: '80px' }}
             disabled={loading}
           />
         </div>

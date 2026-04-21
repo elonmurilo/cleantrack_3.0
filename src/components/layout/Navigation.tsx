@@ -32,11 +32,11 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose, onLogout }) =>
         </li>
         <li>
           <NavLink 
-            to="/servicos" 
+            to="/agendamentos" 
             className={({ isActive }) => isActive ? 'active' : ''}
             onClick={onClose}
           >
-            <CalendarCheck size={20} /> Serviços
+            <CalendarCheck size={20} /> Agenda
           </NavLink>
         </li>
         <li>

@@ -84,8 +84,8 @@ body {
 
 .input-group {
     position: relative;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
     border-radius: var(--radius-md);
     padding: 0.75rem 1rem;
     display: flex;
@@ -96,22 +96,65 @@ body {
 
 .input-group:focus-within {
     border-color: var(--primary-gold);
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(235, 180, 63, 0.05);
 }
 
-.input-group i {
+.input-group i, .input-group svg {
     color: var(--primary-gold);
-    font-size: 1.1rem;
+    flex-shrink: 0;
 }
 
-.input-group input {
+.input-group input, 
+.input-group select, 
+.input-group textarea {
     background: none;
     border: none;
-    color: var(--white);
+    color: var(--input-text);
     width: 100%;
     font-size: 1rem;
     outline: none;
     font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+/* Estilos específicos para o seletor nativo */
+.input-group select {
+    cursor: pointer;
+}
+
+.input-group select option {
+    background-color: var(--white);
+    color: var(--text-dark);
+}
+
+.input-group textarea {
+    resize: vertical;
+    padding: 0;
+}
+
+.input-group input::placeholder, 
+.input-group textarea::placeholder {
+    color: var(--input-placeholder);
+    opacity: 1;
+}
+
+/* Overrides para Tema Escuro (Login) */
+#login-screen .input-group {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+#login-screen .input-group input {
+    color: var(--white);
+}
+
+#login-screen .input-group:focus-within {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+#login-screen .input-group input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
 }
 
 .btn-primary-gold {

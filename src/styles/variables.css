@@ -13,6 +13,12 @@
     --border-color: #E5E5E5;
     --accent-blue: #007AFF;
     --accent-green: #34C759;
+    
+    /* Form Elements */
+    --input-bg: rgba(0, 0, 0, 0.05);
+    --input-text: #1D1D1F;
+    --input-border: rgba(0, 0, 0, 0.1);
+    --input-placeholder: #86868B;
 
     /* Shadows */
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
