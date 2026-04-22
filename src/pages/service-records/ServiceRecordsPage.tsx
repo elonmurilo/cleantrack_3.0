@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Briefcase, Plus, Filter } from 'lucide-react';
+import { Briefcase, Plus, Filter, ArrowLeft } from 'lucide-react';
 import StatCard from '../../components/dashboard/StatCard';
 import Button from '../../components/common/Button';
 import ServiceRecordList from '../../components/service-records/ServiceRecordList';
@@ -106,13 +106,29 @@ const ServiceRecordsPage: React.FC = () => {
         />
         
         <div style={{ display: 'flex', gap: '10px', alignSelf: 'flex-start', marginTop: '10px' }}>
-          <Button 
-            variant="action" 
-            onClick={() => { setShowForm(true); setEditingRecord(null); }}
-            style={{ padding: '0.8rem 1.2rem' }}
-          >
-            <Plus size={18} /> Novo Serviço
-          </Button>
+          {!showForm ? (
+            <Button 
+              variant="action" 
+              onClick={() => { setShowForm(true); setEditingRecord(null); }}
+              style={{ padding: '0.8rem 1.2rem' }}
+            >
+              <Plus size={18} /> Novo Serviço
+            </Button>
+          ) : (
+            <Button 
+              variant="action" 
+              onClick={() => { setShowForm(false); setEditingRecord(null); }}
+              style={{ 
+                padding: '0.8rem 1.2rem',
+                backgroundColor: 'transparent',
+                border: '1px solid var(--primary-gold)',
+                color: 'var(--primary-gold)',
+                boxShadow: 'none'
+              }}
+            >
+              <ArrowLeft size={18} /> Voltar para Lista
+            </Button>
+          )}
         </div>
       </div>
 

@@ -18,6 +18,8 @@ import { Cliente } from '../../types/client';
 import { ClientVehicle } from '../../types/vehicle';
 import { Appointment } from '../../types/appointment';
 import Button from '../common/Button';
+import ServicePhotoUpload from './ServicePhotoUpload';
+import ServicePhotoGallery from './ServicePhotoGallery';
 
 interface ServiceRecordFormProps {
   record?: ServiceRecord | null;
@@ -54,6 +56,8 @@ const ServiceRecordForm: React.FC<ServiceRecordFormProps> = ({
     fim_realizado_em: '',
     observacoes: ''
   });
+
+  const [refreshPhotos, setRefreshPhotos] = useState(0);
 
   // Carregar dados iniciais
   useEffect(() => {
@@ -416,6 +420,23 @@ const ServiceRecordForm: React.FC<ServiceRecordFormProps> = ({
           </Button>
         </div>
       </form>
+
+      {record && (
+        <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid var(--border-color)' }}>
+          <h4 style={{ marginBottom: '1.5rem', borderLeft: '4px solid var(--primary-gold)', paddingLeft: '1rem' }}>
+            Galeria do Atendimento
+          </h4>
+          
+          <ServicePhotoUpload 
+            serviceId={record.id} 
+            onUploadSuccess={() => setRefreshPhotos(prev => prev + 1)} 
+          />
+
+          <div style={{ marginTop: '2rem' }}>
+            <ServicePhotoGallery serviceId={record.id} refreshTrigger={refreshPhotos} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

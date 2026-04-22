@@ -4,7 +4,6 @@ import {
   User, 
   Clock, 
   DollarSign, 
-  MoreVertical, 
   Edit2, 
   Trash2, 
   CheckCircle,
@@ -12,6 +11,7 @@ import {
   RotateCcw
 } from 'lucide-react';
 import { ServiceRecord, ServiceRecordStatus } from '../../types/serviceRecord';
+import Button from '../common/Button';
 
 interface ServiceRecordListProps {
   records: ServiceRecord[];
@@ -75,37 +75,58 @@ const ServiceRecordList: React.FC<ServiceRecordListProps> = ({
               </div>
             </div>
             
-            <div className="dropdown">
-              <button className="btn-icon">
-                <MoreVertical size={18} />
-              </button>
-              <div className="dropdown-content">
-                <button onClick={() => onEdit(record)}>
-                  <Edit2 size={14} /> Editar
-                </button>
-                
-                {record.status === 'aberto' && (
-                  <button onClick={() => onStatusChange(record.id, 'em_execucao')}>
-                    <Play size={14} /> Iniciar
-                  </button>
-                )}
-                
-                {record.status === 'em_execucao' && (
-                  <button onClick={() => onStatusChange(record.id, 'concluido')}>
-                    <CheckCircle size={14} /> Finalizar
-                  </button>
-                )}
+            <div className="item-actions" style={{ display: 'flex', gap: '8px' }}>
+              <Button 
+                variant="action" 
+                onClick={() => onEdit(record)}
+                title="Editar"
+                style={{ backgroundColor: 'transparent', color: 'var(--text-dark)', border: '1px solid #ddd', padding: '0.4rem' }}
+              >
+                <Edit2 size={16} />
+              </Button>
+              
+              {record.status === 'aberto' && (
+                <Button 
+                  variant="action" 
+                  onClick={() => onStatusChange(record.id, 'em_execucao')}
+                  title="Iniciar"
+                  style={{ backgroundColor: 'transparent', color: '#007AFF', border: '1px solid #CCE5FF', padding: '0.4rem' }}
+                >
+                  <Play size={16} />
+                </Button>
+              )}
+              
+              {record.status === 'em_execucao' && (
+                <Button 
+                  variant="action" 
+                  onClick={() => onStatusChange(record.id, 'concluido')}
+                  title="Finalizar"
+                  style={{ backgroundColor: 'transparent', color: '#34C759', border: '1px solid #E1F9EB', padding: '0.4rem' }}
+                >
+                  <CheckCircle size={16} />
+                </Button>
+              )}
 
-                {record.status === 'concluido' && (
-                  <button onClick={() => onStatusChange(record.id, 'em_execucao')}>
-                    <RotateCcw size={14} /> Reabrir
-                  </button>
-                )}
+              {record.status === 'concluido' && (
+                <Button 
+                  variant="action" 
+                  onClick={() => onStatusChange(record.id, 'em_execucao')}
+                  title="Reabrir"
+                  style={{ backgroundColor: 'transparent', color: '#EBB43F', border: '1px solid #FFF9E8', padding: '0.4rem' }}
+                >
+                  <RotateCcw size={16} />
+                </Button>
+              )}
 
-                <button onClick={() => onCancel(record.id)} className="delete-btn">
-                  <Trash2 size={14} /> Cancelar
-                </button>
-              </div>
+              <Button 
+                variant="action" 
+                onClick={() => onCancel(record.id)}
+                title="Cancelar"
+                className="delete-btn"
+                style={{ backgroundColor: 'transparent', color: '#FF3B30', border: '1px solid #FFEBEB', padding: '0.4rem' }}
+              >
+                <Trash2 size={16} />
+              </Button>
             </div>
           </div>
 

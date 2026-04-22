@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Users, Search, PlusCircle } from 'lucide-react';
+import { Users, Search, PlusCircle, ArrowLeft } from 'lucide-react';
 import StatCard from '../components/dashboard/StatCard';
 import { clientService } from '../services/clientService';
 import { financialService } from '../services/financialService';
@@ -167,9 +167,26 @@ const Clients: React.FC = () => {
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '1.5rem 0' }}>
         <h2 className="section-title" style={{ margin: 0 }}>Gestão de Clientes</h2>
-        {view === 'list' && (
+        {view === 'list' ? (
           <Button onClick={() => setView('create')} style={{ padding: '0.6rem 1rem', display: 'flex', gap: '8px', alignItems: 'center' }}>
             <PlusCircle size={18} /> Novo Cliente
+          </Button>
+        ) : (
+          <Button 
+            variant="action" 
+            onClick={() => { setView('list'); setSelectedClient(null); }}
+            style={{ 
+              padding: '0.6rem 1rem', 
+              display: 'flex', 
+              gap: '8px', 
+              alignItems: 'center',
+              backgroundColor: 'transparent',
+              border: '1px solid var(--primary-gold)',
+              color: 'var(--primary-gold)',
+              boxShadow: 'none'
+            }}
+          >
+            <ArrowLeft size={18} /> Voltar para Lista
           </Button>
         )}
       </div>
