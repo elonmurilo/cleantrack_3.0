@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, CalendarCheck, DollarSign, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, CalendarCheck, Briefcase, DollarSign, LogOut } from 'lucide-react';
 
 interface NavigationProps {
   isOpen: boolean;
@@ -37,6 +37,15 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose, onLogout }) =>
             onClick={onClose}
           >
             <CalendarCheck size={20} /> Agenda
+          </NavLink>
+        </li>
+        <li>
+          <NavLink 
+            to="/servicos-realizados" 
+            className={({ isActive }) => isActive ? 'active' : ''}
+            onClick={onClose}
+          >
+            <Briefcase size={20} /> Serviços
           </NavLink>
         </li>
         <li>

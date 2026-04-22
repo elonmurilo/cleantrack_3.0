@@ -20,6 +20,7 @@ const AppShell: React.FC = () => {
     if (path.includes('dashboard')) return `Olá, ${profile?.nome || ''}`;
     if (path.includes('clientes')) return 'Clientes';
     if (path.includes('agendamentos')) return 'Agenda';
+    if (path.includes('servicos-realizados')) return 'Serviços Realizados';
     if (path.includes('faturamento')) return 'Faturamento';
     return 'CleanTrack';
   };
