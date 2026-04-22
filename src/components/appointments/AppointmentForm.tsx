@@ -3,6 +3,7 @@ import { User, Car, Calendar, Clock, MessageSquare, X, Tag } from 'lucide-react'
 import { Appointment, AppointmentStatus, CreateAppointmentPayload, UpdateAppointmentPayload } from '../../types/appointment';
 import { clientService } from '../../services/clientService';
 import { appointmentService } from '../../services/appointmentService';
+import { vehicleService } from '../../services/vehicleService';
 import { Cliente } from '../../types/client';
 import Button from '../common/Button';
 
@@ -84,7 +85,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ appointment, onSubmit
       
       setFetchingVehicles(true);
       try {
-        const data = await appointmentService.listCustomerVehicles(formData.cliente_id);
+        const data = await vehicleService.listVehiclesByClient(formData.cliente_id);
         setVehicles(data || []);
       } catch (error) {
         console.error('Erro ao carregar veículos:', error);
@@ -221,12 +222,13 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ appointment, onSubmit
           <Button 
             type="button" 
             onClick={onCancel}
-            variant="action"
             style={{ 
               backgroundColor: 'transparent', 
               border: '1px solid #ddd', 
-              color: 'var(--white)',
-              boxShadow: 'none'
+              color: 'var(--text-dark)',
+              boxShadow: 'none',
+              padding: '1rem',
+              marginTop: '1rem'
             }}
             disabled={loading}
           >

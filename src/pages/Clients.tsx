@@ -3,8 +3,10 @@ import { Users, Search, PlusCircle } from 'lucide-react';
 import StatCard from '../components/dashboard/StatCard';
 import { clientService } from '../services/clientService';
 import { financialService } from '../services/financialService';
+import { vehicleService } from '../services/vehicleService';
 import { Summary } from '../types';
 import { Cliente, CreateClientePayload, UpdateClientePayload } from '../types/client';
+import { ClientVehicle } from '../types/vehicle';
 import ClientList from '../components/clients/ClientList';
 import ClientForm from '../components/clients/ClientForm';
 import { useAuth } from '../hooks/useAuth';
@@ -58,34 +60,67 @@ const Clients: React.FC = () => {
     }
   };
 
-  const handleCreate = async (data: any) => {
+  const handleCreate = async (clientData: any, vehicleData: { vehicles: Partial<ClientVehicle>[], deletedIds: string[] }) => {
     if (!user) return;
     setActionLoading(true);
     try {
+      // 1. Cadastra o cliente
       const payload: CreateClientePayload = {
-        ...data,
+        ...clientData,
         created_by: user.id
       };
-      await clientService.createClient(payload);
+      const newClient = await clientService.createClient(payload);
+      
+      // 2. Cadastra os veículos vinculados
+      if (vehicleData.vehicles.length > 0) {
+        await Promise.all(vehicleData.vehicles.map(v => 
+          vehicleService.createVehicle({ 
+            ...v as any, 
+            cliente_id: newClient.id 
+          })
+        ));
+      }
+
       setView('list');
       loadData();
     } catch (error) {
-      alert("Erro ao cadastrar cliente. Verifique os dados.");
+      alert("Erro ao cadastrar cliente e veículos. Verifique os dados.");
       console.error(error);
     } finally {
       setActionLoading(false);
     }
   };
 
-  const handleUpdate = async (data: any) => {
+  const handleUpdate = async (clientData: any, vehicleData: { vehicles: Partial<ClientVehicle>[], deletedIds: string[] }) => {
     if (!user || !selectedClient) return;
     setActionLoading(true);
     try {
+      // 1. Atualiza dados do cliente
       const payload: UpdateClientePayload = {
-        ...data,
+        ...clientData,
         updated_by: user.id
       };
       await clientService.updateClient(selectedClient.id, payload);
+
+      // 2. Desativa veículos removidos
+      if (vehicleData.deletedIds.length > 0) {
+        await Promise.all(vehicleData.deletedIds.map(id => vehicleService.deactivateVehicle(id)));
+      }
+
+      // 3. Atualiza ou Cria veículos da lista atual
+      await Promise.all(vehicleData.vehicles.map(v => {
+        if (v.id) {
+          // Atualiza existente
+          return vehicleService.updateVehicle(v.id, v as any, selectedClient.id);
+        } else {
+          // Cria novo
+          return vehicleService.createVehicle({
+            ...v as any,
+            cliente_id: selectedClient.id
+          });
+        }
+      }));
+
       setView('list');
       setSelectedClient(null);
       loadData();

@@ -102,19 +102,5 @@ export const appointmentService = {
       .eq('id', id);
 
     if (error) throw error;
-  },
-
-  /**
-   * Lista veículos de um cliente específico
-   */
-  listCustomerVehicles: async (clienteId: string) => {
-    const { data, error } = await supabase
-      .from('cliente_veiculos')
-      .select('*')
-      .eq('cliente_id', clienteId)
-      .eq('ativo', true);
-
-    if (error) throw error;
-    return data;
   }
 };
