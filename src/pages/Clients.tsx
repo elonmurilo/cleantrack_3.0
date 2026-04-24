@@ -168,7 +168,7 @@ const Clients: React.FC = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '1.5rem 0' }}>
         <h2 className="section-title" style={{ margin: 0 }}>Gestão de Clientes</h2>
         {view === 'list' ? (
-          <Button onClick={() => setView('create')} style={{ padding: '0.6rem 1rem', display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <Button onClick={() => setView('create')}>
             <PlusCircle size={18} /> Novo Cliente
           </Button>
         ) : (

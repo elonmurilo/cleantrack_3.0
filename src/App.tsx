@@ -6,7 +6,7 @@ import Dashboard from './pages/Dashboard';
 import Clients from './pages/Clients';
 import AppointmentsPage from './pages/appointments/AppointmentsPage';
 import ServiceRecordsPage from './pages/service-records/ServiceRecordsPage';
-import Billing from './pages/Billing';
+import FinancialPage from './pages/financial/FinancialPage';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './routes/ProtectedRoute';
 
@@ -28,7 +28,7 @@ function App() {
               <Route path="clientes" element={<Clients />} />
               <Route path="agendamentos" element={<AppointmentsPage />} />
               <Route path="servicos-realizados" element={<ServiceRecordsPage />} />
-              <Route path="faturamento" element={<Billing />} />
+              <Route path="faturamento" element={<FinancialPage />} />
             </Route>
           </Route>
 
