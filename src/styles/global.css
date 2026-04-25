@@ -333,6 +333,8 @@ body {
 .icon-clients { background: #E1F9EB; color: #34C759; }
 .icon-services { background: #E1F3FF; color: #007AFF; }
 .icon-billing { background: #FDEBD0; color: #EBB43F; }
+.icon-cancelado { background: #FEE2E2; color: #EF4444; }
+.icon-pending { background: #FEF9C3; color: #854D0E; }
 
 .section-title {
     font-size: 1.1rem;
@@ -399,6 +401,36 @@ body {
 }
 
 .btn-action i { font-size: 0.8rem; }
+
+.btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-danger {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+}
+
+.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
 
 /* Billing Chart Area */
 .chart-container {
