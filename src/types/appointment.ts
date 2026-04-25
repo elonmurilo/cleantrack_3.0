@@ -27,6 +27,7 @@ export interface Appointment {
     placa?: string;
     modelo?: string;
     marca?: string;
+    tipo_veiculo?: 'carro' | 'moto';
   };
 }
 

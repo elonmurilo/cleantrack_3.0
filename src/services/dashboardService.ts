@@ -105,7 +105,7 @@ export const dashboardService = {
       // Serviços em execução
       supabase
         .from('servicos_realizados')
-        .select('*, cliente:clientes(nome), veiculo:cliente_veiculos(marca, modelo, placa)')
+        .select('*, cliente:clientes(nome), veiculo:cliente_veiculos(marca, modelo, placa, tipo_veiculo)')
         .eq('ativo', true)
         .eq('status', 'em_execucao'),
       

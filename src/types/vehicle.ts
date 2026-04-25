@@ -3,6 +3,7 @@ export interface ClientVehicle {
   cliente_id: string;
   marca: string;
   modelo: string;
+  tipo_veiculo: 'carro' | 'moto';
   cor?: string;
   placa?: string;
   ano?: number;
@@ -17,6 +18,7 @@ export interface CreateVehiclePayload {
   cliente_id: string;
   marca: string;
   modelo: string;
+  tipo_veiculo: 'carro' | 'moto';
   cor?: string;
   placa?: string;
   ano?: number;
@@ -28,6 +30,7 @@ export interface CreateVehiclePayload {
 export interface UpdateVehiclePayload {
   marca?: string;
   modelo?: string;
+  tipo_veiculo?: 'carro' | 'moto';
   cor?: string;
   placa?: string;
   ano?: number;

@@ -16,7 +16,7 @@ export const serviceRecordService = {
       .select(`
         *,
         cliente:clientes(nome),
-        veiculo:cliente_veiculos(marca, modelo, placa)
+        veiculo:cliente_veiculos(marca, modelo, placa, tipo_veiculo)
       `)
       .eq('ativo', true)
       .order('created_at', { ascending: false });
@@ -38,7 +38,7 @@ export const serviceRecordService = {
       .select(`
         *,
         cliente:clientes(nome),
-        veiculo:cliente_veiculos(marca, modelo, placa)
+        veiculo:cliente_veiculos(marca, modelo, placa, tipo_veiculo)
       `)
       .eq('id', id)
       .single();
@@ -57,7 +57,7 @@ export const serviceRecordService = {
       .select(`
         *,
         cliente:clientes(nome),
-        veiculo:cliente_veiculos(marca, modelo, placa)
+        veiculo:cliente_veiculos(marca, modelo, placa, tipo_veiculo)
       `)
       .single();
 

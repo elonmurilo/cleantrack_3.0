@@ -1,6 +1,7 @@
 import React from 'react';
 import { 
   Car, 
+  Bike,
   User, 
   Clock, 
   DollarSign, 
@@ -143,12 +144,18 @@ const ServiceRecordList: React.FC<ServiceRecordListProps> = ({
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div className="avatar" style={{ width: '32px', height: '32px', fontSize: '0.8rem', backgroundColor: '#F0F0F0' }}>
-                <Car size={16} />
+                {record.veiculo?.tipo_veiculo === 'moto' ? <Bike size={16} /> : <Car size={16} />}
               </div>
               <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 <span className="item-subtext">Veículo</span>
                 <span className="item-name" style={{ fontSize: '0.9rem' }}>
-                  {record.veiculo ? `${record.veiculo.marca} ${record.veiculo.modelo}` : 'Sem veículo'}
+                  {record.veiculo ? (
+                    <>
+                      <span style={{ fontSize: '0.7rem', textTransform: 'capitalize', color: 'var(--text-muted)' }}>
+                        {record.veiculo.tipo_veiculo || 'Carro'} •
+                      </span> {record.veiculo.marca} {record.veiculo.modelo}
+                    </>
+                  ) : 'Sem veículo'}
                 </span>
               </div>
             </div>

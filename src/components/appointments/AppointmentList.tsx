@@ -1,5 +1,5 @@
 import React from 'react';
-import { CalendarCheck, ChevronRight, Edit2, Play, CheckCircle, XCircle } from 'lucide-react';
+import { CalendarCheck, ChevronRight, Edit2, Play, CheckCircle, XCircle, Car, Bike } from 'lucide-react';
 import { Appointment, AppointmentStatus } from '../../types/appointment';
 import Avatar from '../common/Avatar';
 import Button from '../common/Button';
@@ -70,8 +70,13 @@ const AppointmentList: React.FC<AppointmentListProps> = ({
               </span>
             </div>
             
-            <span className="item-subtext">
-              {appointment.veiculo ? `${appointment.veiculo.modelo} (${appointment.veiculo.placa})` : 'Veículo não informado'}
+            <span className="item-subtext" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              {appointment.veiculo?.tipo_veiculo === 'moto' ? <Bike size={14} /> : <Car size={14} />}
+              {appointment.veiculo ? (
+                <span>
+                  <span style={{ textTransform: 'capitalize' }}>{appointment.veiculo.tipo_veiculo || 'Carro'}</span> • {appointment.veiculo.modelo} ({appointment.veiculo.placa})
+                </span>
+              ) : 'Veículo não informado'}
             </span>
             <span className="item-subtext" style={{ fontStyle: 'italic' }}>
               {appointment.titulo}

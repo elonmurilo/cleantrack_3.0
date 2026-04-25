@@ -59,32 +59,30 @@ const ClientForm: React.FC<ClientFormProps> = ({ client, onSubmit, onCancel, loa
   const handleSubmitInternal = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (vehicles.length === 0) {
-      alert("Por favor, adicione pelo menos um veículo para este cliente.");
-      return;
-    }
-    
     // Passar dados do cliente, lista de veículos e IDs para deletar
     onSubmit(formData, { vehicles, deletedIds: deletedVehicleIds });
   };
 
   const handleAddVehicle = (vehicleData: any) => {
+    // Se este veículo for marcado como principal, desmarcar os outros localmente
+    let updatedVehicles = [...vehicles];
+    
+    if (vehicleData.principal) {
+      updatedVehicles = updatedVehicles.map(v => ({ ...v, principal: false }));
+    } else if (vehicles.length === 0) {
+      // Se for o primeiro veículo e não estiver marcado como principal, marca por padrão
+      vehicleData.principal = true;
+    }
+
     if (editingVehicle && editingVehicle.index !== undefined) {
       // Update existing in local state
-      const updated = [...vehicles];
-      updated[editingVehicle.index] = { ...vehicleData, id: editingVehicle.vehicle.id };
-      setVehicles(updated);
+      updatedVehicles[editingVehicle.index] = { ...vehicleData, id: editingVehicle.vehicle.id };
     } else {
       // Add new to local state
-      // Se for o primeiro veículo, marca como principal por padrão
-      if (vehicles.length === 0) {
-        vehicleData.principal = true;
-      } else if (vehicleData.principal) {
-        // Se este for marcado como principal, desmarcar os outros localmente
-        setVehicles(vehicles.map(v => ({ ...v, principal: false })));
-      }
-      setVehicles([...vehicles, { ...vehicleData, ativo: true }]);
+      updatedVehicles.push({ ...vehicleData, ativo: true });
     }
+    
+    setVehicles(updatedVehicles);
     setShowVehicleForm(false);
     setEditingVehicle(null);
   };
@@ -213,8 +211,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ client, onSubmit, onCancel, loa
         />
         
         {vehicles.length === 0 && !showVehicleForm && (
-          <div style={{ marginTop: '1rem', padding: '0.75rem', backgroundColor: 'rgba(235, 180, 63, 0.1)', color: 'var(--primary-gold)', borderRadius: 'var(--radius-sm)', fontSize: '0.85rem', textAlign: 'center' }}>
-            <strong>Atenção:</strong> É necessário cadastrar pelo menos um veículo para salvar o cliente.
+          <div style={{ marginTop: '1rem', padding: '1rem', backgroundColor: '#FFF9E8', color: '#854D0E', border: '1px solid #FFE58F', borderRadius: 'var(--radius-sm)', fontSize: '0.85rem', textAlign: 'center' }}>
+            Este cliente ainda não possui veículos cadastrados.
           </div>
         )}
       </div>
@@ -237,9 +235,9 @@ const ClientForm: React.FC<ClientFormProps> = ({ client, onSubmit, onCancel, loa
         <Button 
           type="submit" 
           form="client-form" // Trigger the form in the first card
-          disabled={loading || vehicles.length === 0}
+          disabled={loading}
         >
-          {loading ? 'Salvando...' : client ? 'Salvar Tudo' : 'Cadastrar Cliente e Veículos'}
+          {loading ? 'Salvando...' : client ? 'Salvar Alterações' : 'Cadastrar Cliente'}
         </Button>
       </div>
     </div>

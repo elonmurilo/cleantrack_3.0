@@ -1,5 +1,5 @@
 import React from 'react';
-import { Car, Edit2, Trash2, Star, CheckCircle } from 'lucide-react';
+import { Car, Bike, Edit2, Trash2, Star, CheckCircle } from 'lucide-react';
 import { ClientVehicle } from '../../types/vehicle';
 
 interface VehicleListProps {
@@ -39,12 +39,20 @@ const VehicleList: React.FC<VehicleListProps> = ({
           }}
         >
           <div className="avatar" style={{ width: '40px', height: '40px', background: vehicle.cor || '#eee' }}>
-            <Car size={18} color={vehicle.cor ? '#fff' : '#999'} />
+            {vehicle.tipo_veiculo === 'moto' ? (
+              <Bike size={18} color={vehicle.cor ? '#fff' : '#999'} />
+            ) : (
+              <Car size={18} color={vehicle.cor ? '#fff' : '#999'} />
+            )}
           </div>
           
           <div className="item-details" style={{ flex: 1, marginLeft: '0.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span className="item-name" style={{ fontSize: '0.95rem' }}>{vehicle.marca} {vehicle.modelo}</span>
+              <span className="item-name" style={{ fontSize: '0.95rem' }}>
+                <span style={{ fontSize: '0.75rem', textTransform: 'capitalize', color: 'var(--text-muted)' }}>
+                  {vehicle.tipo_veiculo || 'carro'} • 
+                </span> {vehicle.marca} {vehicle.modelo}
+              </span>
               {vehicle.principal && (
                 <span style={{ 
                   backgroundColor: 'var(--primary-gold)', 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   User, 
   Car, 
+  Bike,
   Calendar, 
   Clock, 
   MessageSquare, 
@@ -281,7 +282,9 @@ const ServiceRecordForm: React.FC<ServiceRecordFormProps> = ({
                 {fetchingVehicles ? 'Carregando veículos...' : vehicles.length === 0 ? 'Nenhum veículo' : 'Selecionar Veículo'}
               </option>
               {vehicles.map(v => (
-                <option key={v.id} value={v.id}>{v.marca} {v.modelo} ({v.placa})</option>
+                <option key={v.id} value={v.id}>
+                  {v.tipo_veiculo === 'moto' ? 'Moto' : 'Carro'} - {v.marca} {v.modelo} ({v.placa || 'Sem placa'})
+                </option>
               ))}
             </select>
           </div>

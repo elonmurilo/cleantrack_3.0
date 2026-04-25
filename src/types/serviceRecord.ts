@@ -28,6 +28,7 @@ export interface ServiceRecord {
     marca: string;
     modelo: string;
     placa: string;
+    tipo_veiculo?: 'carro' | 'moto';
   };
 }
 

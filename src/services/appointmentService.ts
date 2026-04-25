@@ -13,7 +13,7 @@ export const appointmentService = {
   listAppointments: async (): Promise<Appointment[]> => {
     const { data, error } = await supabase
       .from('agendamentos')
-      .select('*, cliente:clientes(nome), veiculo:cliente_veiculos(modelo, marca, placa)')
+      .select('*, cliente:clientes(nome), veiculo:cliente_veiculos(modelo, marca, placa, tipo_veiculo)')
       .eq('ativo', true)
       .order('inicio_agendado', { ascending: true });
 
@@ -31,7 +31,7 @@ export const appointmentService = {
   getAppointmentById: async (id: string): Promise<Appointment> => {
     const { data, error } = await supabase
       .from('agendamentos')
-      .select('*, cliente:clientes(nome), veiculo:cliente_veiculos(modelo, marca, placa)')
+      .select('*, cliente:clientes(nome), veiculo:cliente_veiculos(modelo, marca, placa, tipo_veiculo)')
       .eq('id', id)
       .single();
 
@@ -46,7 +46,7 @@ export const appointmentService = {
     const { data, error } = await supabase
       .from('agendamentos')
       .insert([payload])
-      .select('*, cliente:clientes(nome), veiculo:cliente_veiculos(modelo, marca, placa)')
+      .select('*, cliente:clientes(nome), veiculo:cliente_veiculos(modelo, marca, placa, tipo_veiculo)')
       .single();
 
     if (error) {

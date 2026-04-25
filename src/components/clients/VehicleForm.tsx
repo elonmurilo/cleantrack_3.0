@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Car, X, Tag, Calendar, Info, CheckCircle } from 'lucide-react';
+import { Car, Bike, X, Tag, Calendar, Info, CheckCircle } from 'lucide-react';
 import { ClientVehicle } from '../../types/vehicle';
 import Button from '../common/Button';
 
@@ -21,6 +21,7 @@ const VehicleForm: React.FC<VehicleFormProps> = ({
   const [formData, setFormData] = useState({
     marca: '',
     modelo: '',
+    tipo_veiculo: 'carro' as 'carro' | 'moto',
     cor: '',
     placa: '',
     ano: new Date().getFullYear(),
@@ -33,6 +34,7 @@ const VehicleForm: React.FC<VehicleFormProps> = ({
       setFormData({
         marca: vehicle.marca || '',
         modelo: vehicle.modelo || '',
+        tipo_veiculo: (vehicle.tipo_veiculo as 'carro' | 'moto') || 'carro',
         cor: vehicle.cor || '',
         placa: vehicle.placa || '',
         ano: vehicle.ano || new Date().getFullYear(),
@@ -59,12 +61,25 @@ const VehicleForm: React.FC<VehicleFormProps> = ({
       </div>
 
       <form onSubmit={handleSubmit} className="login-form" style={{ gap: '1rem' }}>
+        <div className="input-group">
+          {formData.tipo_veiculo === 'carro' ? <Car size={18} color="var(--primary-gold)" /> : <Bike size={18} color="var(--primary-gold)" />}
+          <select 
+            value={formData.tipo_veiculo}
+            onChange={e => setFormData({ ...formData, tipo_veiculo: e.target.value as 'carro' | 'moto' })}
+            required
+            disabled={loading}
+          >
+            <option value="carro">Carro</option>
+            <option value="moto">Moto</option>
+          </select>
+        </div>
+
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
           <div className="input-group">
             <Tag size={18} color="var(--primary-gold)" />
             <input 
               type="text" 
-              placeholder="Marca (ex: Toyota) *" 
+              placeholder={formData.tipo_veiculo === 'moto' ? "Marca (ex: Yamaha) *" : "Marca (ex: Toyota) *"} 
               value={formData.marca}
               onChange={e => setFormData({ ...formData, marca: e.target.value })}
               required 
@@ -72,10 +87,10 @@ const VehicleForm: React.FC<VehicleFormProps> = ({
             />
           </div>
           <div className="input-group">
-            <Car size={18} color="var(--primary-gold)" />
+            {formData.tipo_veiculo === 'moto' ? <Bike size={18} color="var(--primary-gold)" /> : <Car size={18} color="var(--primary-gold)" />}
             <input 
               type="text" 
-              placeholder="Modelo (ex: Corolla) *" 
+              placeholder={formData.tipo_veiculo === 'moto' ? "Modelo (ex: Lander 250cc) *" : "Modelo (ex: Corolla) *"} 
               value={formData.modelo}
               onChange={e => setFormData({ ...formData, modelo: e.target.value })}
               required 

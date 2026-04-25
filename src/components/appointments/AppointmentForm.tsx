@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Car, Calendar, Clock, MessageSquare, X, Tag } from 'lucide-react';
+import { User, Car, Bike, Calendar, Clock, MessageSquare, X, Tag, AlertCircle } from 'lucide-react';
 import { Appointment, AppointmentStatus, CreateAppointmentPayload, UpdateAppointmentPayload } from '../../types/appointment';
 import { clientService } from '../../services/clientService';
 import { appointmentService } from '../../services/appointmentService';
@@ -145,10 +145,29 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ appointment, onSubmit
               {fetchingVehicles ? 'Carregando veículos...' : vehicles.length === 0 ? 'Nenhum veículo cadastrado' : 'Selecionar Veículo (Opcional)'}
             </option>
             {vehicles.map(v => (
-              <option key={v.id} value={v.id}>{v.modelo} - {v.placa}</option>
+              <option key={v.id} value={v.id}>
+                {v.tipo_veiculo === 'moto' ? 'Moto' : 'Carro'} - {v.marca} {v.modelo} {v.placa ? `- ${v.placa}` : ''}
+              </option>
             ))}
           </select>
         </div>
+
+        {formData.cliente_id && !fetchingVehicles && vehicles.length === 0 && (
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '0.5rem', 
+            padding: '0.75rem', 
+            backgroundColor: '#FFF9E8', 
+            borderRadius: 'var(--radius-md)',
+            border: '1px solid #FFE58F',
+            color: '#854D0E',
+            fontSize: '0.85rem'
+          }}>
+            <AlertCircle size={16} />
+            <span>Este cliente não possui veículo cadastrado. O agendamento será salvo sem veículo.</span>
+          </div>
+        )}
 
         <div className="input-group">
           <Tag size={18} color="var(--primary-gold)" />

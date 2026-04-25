@@ -83,8 +83,12 @@ const Clients: React.FC = () => {
 
       setView('list');
       loadData();
+
+      if (vehicleData.vehicles.length === 0) {
+        alert("Cliente cadastrado com sucesso. Cadastre um veículo para facilitar os próximos agendamentos.");
+      }
     } catch (error) {
-      alert("Erro ao cadastrar cliente e veículos. Verifique os dados.");
+      alert("Erro ao cadastrar cliente. Verifique os dados.");
       console.error(error);
     } finally {
       setActionLoading(false);
@@ -124,6 +128,10 @@ const Clients: React.FC = () => {
       setView('list');
       setSelectedClient(null);
       loadData();
+
+      if (vehicleData.vehicles.length === 0) {
+        alert("Alterações salvas. Lembre-se de cadastrar um veículo para facilitar os agendamentos.");
+      }
     } catch (error) {
       alert("Erro ao atualizar cliente.");
       console.error(error);
