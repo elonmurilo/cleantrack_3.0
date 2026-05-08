@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Mail, Lock } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import Button from '../components/common/Button';
+import { getDefaultRoute } from '../config/permissions';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -13,10 +14,11 @@ const Login: React.FC = () => {
   const { signIn, session, profile, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
-  // Se já estiver logado e com perfil ativo, redireciona para o dashboard
+  // Se já estiver logado e com perfil ativo, redireciona para a rota padrão do perfil
   useEffect(() => {
     if (!authLoading && session && profile?.ativo) {
-      navigate('/dashboard');
+      const defaultRoute = getDefaultRoute(profile.papel);
+      navigate(defaultRoute);
     }
   }, [session, profile, authLoading, navigate]);
 
