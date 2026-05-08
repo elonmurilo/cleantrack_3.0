@@ -9,6 +9,7 @@ import ServiceRecordsPage from './pages/service-records/ServiceRecordsPage';
 import FinancialPage from './pages/financial/FinancialPage';
 import UsersPage from './pages/UsersPage';
 import SettingsPage from './pages/SettingsPage';
+import ReportsPage from './pages/reports/ReportsPage';
 import AccessDenied from './pages/AccessDenied';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './routes/ProtectedRoute';
@@ -41,6 +42,7 @@ function App() {
               <Route element={<ProtectedRoute allowedRoles={['admin', 'gestor']} />}>
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="faturamento" element={<FinancialPage />} />
+                <Route path="relatorios" element={<ReportsPage />} />
               </Route>
               
               <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
