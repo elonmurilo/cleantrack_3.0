@@ -115,130 +115,144 @@ const ClientForm: React.FC<ClientFormProps> = ({ client, onSubmit, onCancel, loa
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      {/* Dados Básicos do Cliente */}
-      <div className="card" style={{ display: 'block', padding: '1.5rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-          <h3 style={{ margin: 0 }}>{client ? 'Editar Cliente' : 'Novo Cliente'}</h3>
-          <button onClick={onCancel} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#999' }}>
+    <div className="modal-overlay">
+      <div className="modal-content max-w-4xl">
+        <div className="modal-header">
+          <h2>{client ? 'Editar Cliente' : 'Novo Cliente'}</h2>
+          <button onClick={onCancel} className="btn-close">
             <X size={20} />
           </button>
         </div>
 
-        <form id="client-form" onSubmit={handleSubmitInternal} className="login-form" style={{ gap: '1.2rem' }}>
-          <div className="input-group">
-            <User size={18} color="var(--primary-gold)" />
-            <input 
-              type="text" 
-              placeholder="Nome Completo *" 
-              value={formData.nome}
-              onChange={e => setFormData({ ...formData, nome: e.target.value })}
-              required 
-              disabled={loading}
-            />
-          </div>
+        <div className="modal-body">
+          <div className="form-grid">
+            <form id="client-form" onSubmit={handleSubmitInternal} className="form-grid col-span-2">
+              <div className="form-group">
+                <label>Nome Completo *</label>
+                <div className="input-group">
+                  <User size={18} color="var(--primary-gold)" />
+                  <input 
+                    type="text" 
+                    placeholder="Ex: João Silva" 
+                    value={formData.nome}
+                    onChange={e => setFormData({ ...formData, nome: e.target.value })}
+                    required 
+                    disabled={loading}
+                  />
+                </div>
+              </div>
 
-          <div className="input-group">
-            <Phone size={18} color="var(--primary-gold)" />
-            <input 
-              type="text" 
-              placeholder="Telefone/WhatsApp *" 
-              value={formData.telefone}
-              onChange={e => setFormData({ ...formData, telefone: e.target.value })}
-              required 
-              disabled={loading}
-            />
-          </div>
+              <div className="form-group">
+                <label>Telefone/WhatsApp *</label>
+                <div className="input-group">
+                  <Phone size={18} color="var(--primary-gold)" />
+                  <input 
+                    type="text" 
+                    placeholder="(00) 00000-0000" 
+                    value={formData.telefone}
+                    onChange={e => setFormData({ ...formData, telefone: e.target.value })}
+                    required 
+                    disabled={loading}
+                  />
+                </div>
+              </div>
 
-          <div className="input-group">
-            <Mail size={18} color="var(--primary-gold)" />
-            <input 
-              type="email" 
-              placeholder="E-mail" 
-              value={formData.email}
-              onChange={e => setFormData({ ...formData, email: e.target.value })}
-              disabled={loading}
-            />
-          </div>
+              <div className="form-group col-span-2">
+                <label>E-mail (Opcional)</label>
+                <div className="input-group">
+                  <Mail size={18} color="var(--primary-gold)" />
+                  <input 
+                    type="email" 
+                    placeholder="joao@exemplo.com" 
+                    value={formData.email}
+                    onChange={e => setFormData({ ...formData, email: e.target.value })}
+                    disabled={loading}
+                  />
+                </div>
+              </div>
 
-          <div className="input-group" style={{ alignItems: 'flex-start' }}>
-            <MessageSquare size={18} color="var(--primary-gold)" style={{ marginTop: '0.5rem' }} />
-            <textarea 
-              placeholder="Observações" 
-              value={formData.observacoes}
-              onChange={e => setFormData({ ...formData, observacoes: e.target.value })}
-              style={{ minHeight: '80px' }}
-              disabled={loading}
-            />
-          </div>
-        </form>
-      </div>
+              <div className="form-group col-span-2">
+                <label>Observações</label>
+                <div className="input-group" style={{ alignItems: 'flex-start' }}>
+                  <MessageSquare size={18} color="var(--primary-gold)" style={{ marginTop: '0.5rem' }} />
+                  <textarea 
+                    placeholder="Informações adicionais sobre o cliente..." 
+                    value={formData.observacoes}
+                    onChange={e => setFormData({ ...formData, observacoes: e.target.value })}
+                    style={{ minHeight: '80px' }}
+                    disabled={loading}
+                  />
+                </div>
+              </div>
+            </form>
 
-      {/* Gestão de Veículos */}
-      <div className="card" style={{ display: 'block', padding: '1.5rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Car size={20} color="var(--primary-gold)" />
-            <h3 style={{ margin: 0, fontSize: '1.1rem' }}>Veículos do Cliente</h3>
+            {/* Gestão de Veículos */}
+            <div className="form-group col-span-2" style={{ marginTop: '1rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-color)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Car size={20} color="var(--primary-gold)" />
+                  <h3 style={{ margin: 0, fontSize: '1.1rem' }}>Veículos</h3>
+                </div>
+                <Button 
+                  variant="action" 
+                  onClick={() => { setEditingVehicle(null); setShowVehicleForm(true); }}
+                  style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}
+                >
+                  <Plus size={16} /> Novo Veículo
+                </Button>
+              </div>
+
+              {showVehicleForm && (
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <VehicleForm 
+                    vehicle={editingVehicle?.vehicle}
+                    onSubmit={handleAddVehicle}
+                    onCancel={() => { setShowVehicleForm(false); setEditingVehicle(null); }}
+                    loading={false}
+                    isNewClient={!client}
+                  />
+                </div>
+              )}
+
+              <VehicleList 
+                vehicles={vehicles}
+                onEdit={handleEditVehicle}
+                onDelete={handleDeleteVehicle}
+                onSetPrincipal={handleSetPrincipal}
+                loading={fetchingVehicles}
+              />
+              
+              {vehicles.length === 0 && !showVehicleForm && (
+                <div style={{ marginTop: '1rem', padding: '1rem', backgroundColor: 'rgba(235, 180, 63, 0.05)', color: '#854D0E', border: '1px solid rgba(235, 180, 63, 0.2)', borderRadius: 'var(--radius-md)', fontSize: '0.85rem', textAlign: 'center' }}>
+                  Este cliente ainda não possui veículos cadastrados.
+                </div>
+              )}
+            </div>
           </div>
-          <Button 
-            variant="action" 
-            onClick={() => { setEditingVehicle(null); setShowVehicleForm(true); }}
-            style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}
-          >
-            <Plus size={16} /> Novo Veículo
-          </Button>
         </div>
 
-        {showVehicleForm && (
-          <div style={{ marginBottom: '1.5rem' }}>
-            <VehicleForm 
-              vehicle={editingVehicle?.vehicle}
-              onSubmit={handleAddVehicle}
-              onCancel={() => { setShowVehicleForm(false); setEditingVehicle(null); }}
-              loading={false}
-              isNewClient={!client}
-            />
-          </div>
-        )}
-
-        <VehicleList 
-          vehicles={vehicles}
-          onEdit={handleEditVehicle}
-          onDelete={handleDeleteVehicle}
-          onSetPrincipal={handleSetPrincipal}
-          loading={fetchingVehicles}
-        />
-        
-        {vehicles.length === 0 && !showVehicleForm && (
-          <div style={{ marginTop: '1rem', padding: '1rem', backgroundColor: '#FFF9E8', color: '#854D0E', border: '1px solid #FFE58F', borderRadius: 'var(--radius-sm)', fontSize: '0.85rem', textAlign: 'center' }}>
-            Este cliente ainda não possui veículos cadastrados.
-          </div>
-        )}
-      </div>
-
-      {/* Botões de Ação Principal */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-        <Button 
-          type="button" 
-          onClick={onCancel}
-          style={{ 
-            backgroundColor: 'transparent', 
-            border: '1px solid #ddd', 
-            color: 'var(--text-dark)',
-            boxShadow: 'none'
-          }}
-          disabled={loading}
-        >
-          Cancelar
-        </Button>
-        <Button 
-          type="submit" 
-          form="client-form" // Trigger the form in the first card
-          disabled={loading}
-        >
-          {loading ? 'Salvando...' : client ? 'Salvar Alterações' : 'Cadastrar Cliente'}
-        </Button>
+        <div className="modal-footer">
+          <Button 
+            type="button" 
+            onClick={onCancel}
+            style={{ 
+              backgroundColor: 'transparent', 
+              border: '1px solid var(--border-color)', 
+              color: 'var(--text-dark)',
+              boxShadow: 'none'
+            }}
+            disabled={loading}
+          >
+            Cancelar
+          </Button>
+          <Button 
+            type="submit" 
+            form="client-form" 
+            disabled={loading}
+          >
+            {loading ? 'Salvando...' : client ? 'Salvar Alterações' : 'Cadastrar Cliente'}
+          </Button>
+        </div>
       </div>
     </div>
   );

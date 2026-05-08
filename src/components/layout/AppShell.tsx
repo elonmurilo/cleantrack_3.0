@@ -56,11 +56,10 @@ const AppShell: React.FC = () => {
   } : null;
 
   return (
-    <div id="app-shell" className="screen">
-      <Header 
-        title={getPageTitle()} 
-        user={headerUser} 
-        onMenuToggle={handleMenuToggle} 
+    <div id="app-shell" className="app-layout">
+      <div 
+        className={`sidebar-overlay ${isMenuOpen ? 'open' : ''}`} 
+        onClick={() => setIsMenuOpen(false)} 
       />
       
       <Navigation 
@@ -69,9 +68,17 @@ const AppShell: React.FC = () => {
         onLogout={handleLogout} 
       />
 
-      <main id="main-content">
-        <Outlet />
-      </main>
+      <div className="main-wrapper">
+        <Header 
+          title={getPageTitle()} 
+          user={headerUser} 
+          onMenuToggle={handleMenuToggle} 
+        />
+        
+        <main id="main-content">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };

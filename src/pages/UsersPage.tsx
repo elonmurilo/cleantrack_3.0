@@ -54,48 +54,60 @@ const UsersPage: React.FC = () => {
 
   return (
     <div className="screen active">
-      <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'rgba(56, 114, 203, 0.1)', borderRadius: '8px', borderLeft: '4px solid var(--primary-color)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary-color)' }}>
-          <Info size={20} />
-          <h3 style={{ margin: 0, fontSize: '1rem' }}>Informação</h3>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+        <div>
+          <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 700 }}>Controle de Usuários</h2>
+          <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Gerencie permissões e acessos da equipe</p>
         </div>
-        <p style={{ marginTop: '0.5rem', color: 'var(--text-color)', fontSize: '0.9rem' }}>
-          Novos usuários devem ser criados manualmente no painel do <strong>Supabase Auth</strong>. Após a criação, eles aparecerão aqui para ajuste de perfil e status.
-        </p>
       </div>
 
-      <div className="top-bar" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-        <div className="search-bar" style={{ flex: 1, minWidth: '250px' }}>
-          <Search size={20} />
-          <input 
-            type="text" 
-            placeholder="Buscar por nome ou e-mail..." 
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+      <div style={{ marginBottom: '2rem', padding: '1.25rem', backgroundColor: 'rgba(56, 114, 203, 0.05)', borderRadius: '12px', border: '1px solid rgba(56, 114, 203, 0.1)', display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+        <div style={{ padding: '0.5rem', backgroundColor: 'rgba(56, 114, 203, 0.1)', borderRadius: '8px', color: 'var(--primary-color)' }}>
+          <Info size={20} />
         </div>
-        
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <select 
-            value={roleFilter} 
-            onChange={(e) => setRoleFilter(e.target.value)}
-            style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)', color: 'var(--text-color)' }}
-          >
-            <option value="todos">Todos os Papéis</option>
-            <option value="admin">Administrador</option>
-            <option value="gestor">Gestor</option>
-            <option value="operador">Operador</option>
-          </select>
+        <div>
+          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 600, color: 'var(--primary-color)' }}>Gestão de Acessos</h3>
+          <p style={{ marginTop: '0.25rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.5' }}>
+            Novos usuários devem ser criados manualmente no painel do <strong>Supabase Auth</strong>. Após a criação, eles aparecerão aqui para ajuste de perfil e status.
+          </p>
+        </div>
+      </div>
 
-          <select 
-            value={statusFilter} 
-            onChange={(e) => setStatusFilter(e.target.value)}
-            style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)', color: 'var(--text-color)' }}
-          >
-            <option value="todos">Todos os Status</option>
-            <option value="ativos">Ativos</option>
-            <option value="inativos">Inativos</option>
-          </select>
+      <div className="card" style={{ padding: '0.75rem 1rem', marginBottom: '2rem', border: '1px solid var(--border-color)' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
+          <div className="input-group" style={{ flex: 1, border: 'none', padding: 0 }}>
+            <Search size={20} color="var(--text-muted)" />
+            <input 
+              type="text" 
+              placeholder="Buscar por nome ou e-mail..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ background: 'none', border: 'none', width: '100%', outline: 'none', padding: '0.5rem 0' }}
+            />
+          </div>
+          
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', borderLeft: '1px solid var(--border-color)', paddingLeft: '1rem' }}>
+            <select 
+              value={roleFilter} 
+              onChange={(e) => setRoleFilter(e.target.value)}
+              style={{ background: 'none', border: 'none', outline: 'none', fontWeight: 500, color: 'var(--text-dark)' }}
+            >
+              <option value="todos">Todos os Papéis</option>
+              <option value="admin">Administrador</option>
+              <option value="gestor">Gestor</option>
+              <option value="operador">Operador</option>
+            </select>
+
+            <select 
+              value={statusFilter} 
+              onChange={(e) => setStatusFilter(e.target.value)}
+              style={{ background: 'none', border: 'none', outline: 'none', fontWeight: 500, color: 'var(--text-dark)' }}
+            >
+              <option value="todos">Todos os Status</option>
+              <option value="ativos">Ativos</option>
+              <option value="inativos">Inativos</option>
+            </select>
+          </div>
         </div>
       </div>
 

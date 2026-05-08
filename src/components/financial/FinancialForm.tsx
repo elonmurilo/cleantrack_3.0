@@ -97,8 +97,8 @@ const FinancialForm: React.FC<FinancialFormProps> = ({
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="modal-body p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="modal-body">
+          <div className="form-grid">
             <div className="form-group">
               <label>Tipo *</label>
               <select 
@@ -128,7 +128,7 @@ const FinancialForm: React.FC<FinancialFormProps> = ({
               </select>
             </div>
 
-            <div className="form-group md:col-span-2">
+            <div className="form-group col-span-2">
               <label>Descrição *</label>
               <input 
                 type="text" 
@@ -244,7 +244,7 @@ const FinancialForm: React.FC<FinancialFormProps> = ({
               </select>
             </div>
 
-            <div className="form-group md:col-span-2">
+            <div className="form-group col-span-2">
               <label>Observações</label>
               <textarea 
                 name="observacoes" 

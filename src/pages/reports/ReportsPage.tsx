@@ -94,36 +94,106 @@ const ReportsPage: React.FC = () => {
   return (
     <div className="screen active">
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
-        <BarChart size={32} color="var(--primary-color)" />
-        <h1 style={{ margin: 0 }}>Relatórios Gerenciais</h1>
+        <div style={{ padding: '0.75rem', backgroundColor: 'var(--primary-gold)', borderRadius: '12px', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <BarChart size={24} />
+        </div>
+        <div>
+          <h1 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 700 }}>Relatórios Gerenciais</h1>
+          <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Analise o desempenho do seu negócio em tempo real</p>
+        </div>
       </div>
 
-      <div className="tabs-container" style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--border-color)', display: 'flex', gap: '1rem', overflowX: 'auto' }}>
+      <div className="tabs-container" style={{ 
+        marginBottom: '2rem', 
+        display: 'flex', 
+        gap: '0.5rem', 
+        overflowX: 'auto',
+        padding: '4px',
+        backgroundColor: 'rgba(0,0,0,0.03)',
+        borderRadius: '12px',
+        width: 'fit-content'
+      }}>
         <button 
           className={`tab-button ${activeTab === 'financeiro' ? 'active' : ''}`}
           onClick={() => handleTabChange('financeiro')}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1rem', background: 'none', border: 'none', borderBottom: activeTab === 'financeiro' ? '2px solid var(--primary-color)' : '2px solid transparent', color: activeTab === 'financeiro' ? 'var(--primary-color)' : 'var(--text-muted)', cursor: 'pointer', fontWeight: 500 }}
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '0.5rem', 
+            padding: '0.6rem 1.25rem', 
+            background: activeTab === 'financeiro' ? 'white' : 'transparent', 
+            border: 'none', 
+            borderRadius: '10px',
+            boxShadow: activeTab === 'financeiro' ? '0 2px 8px rgba(0,0,0,0.08)' : 'none',
+            color: activeTab === 'financeiro' ? 'var(--primary-gold)' : 'var(--text-muted)', 
+            cursor: 'pointer', 
+            fontWeight: 600,
+            transition: 'all 0.2s ease',
+            whiteSpace: 'nowrap'
+          }}
         >
           <DollarSign size={18} /> Financeiro
         </button>
         <button 
           className={`tab-button ${activeTab === 'servicos' ? 'active' : ''}`}
           onClick={() => handleTabChange('servicos')}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1rem', background: 'none', border: 'none', borderBottom: activeTab === 'servicos' ? '2px solid var(--primary-color)' : '2px solid transparent', color: activeTab === 'servicos' ? 'var(--primary-color)' : 'var(--text-muted)', cursor: 'pointer', fontWeight: 500 }}
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '0.5rem', 
+            padding: '0.6rem 1.25rem', 
+            background: activeTab === 'servicos' ? 'white' : 'transparent', 
+            border: 'none', 
+            borderRadius: '10px',
+            boxShadow: activeTab === 'servicos' ? '0 2px 8px rgba(0,0,0,0.08)' : 'none',
+            color: activeTab === 'servicos' ? 'var(--primary-gold)' : 'var(--text-muted)', 
+            cursor: 'pointer', 
+            fontWeight: 600,
+            transition: 'all 0.2s ease',
+            whiteSpace: 'nowrap'
+          }}
         >
           <Briefcase size={18} /> Serviços
         </button>
         <button 
           className={`tab-button ${activeTab === 'clientes' ? 'active' : ''}`}
           onClick={() => handleTabChange('clientes')}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1rem', background: 'none', border: 'none', borderBottom: activeTab === 'clientes' ? '2px solid var(--primary-color)' : '2px solid transparent', color: activeTab === 'clientes' ? 'var(--primary-color)' : 'var(--text-muted)', cursor: 'pointer', fontWeight: 500 }}
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '0.5rem', 
+            padding: '0.6rem 1.25rem', 
+            background: activeTab === 'clientes' ? 'white' : 'transparent', 
+            border: 'none', 
+            borderRadius: '10px',
+            boxShadow: activeTab === 'clientes' ? '0 2px 8px rgba(0,0,0,0.08)' : 'none',
+            color: activeTab === 'clientes' ? 'var(--primary-gold)' : 'var(--text-muted)', 
+            cursor: 'pointer', 
+            fontWeight: 600,
+            transition: 'all 0.2s ease',
+            whiteSpace: 'nowrap'
+          }}
         >
           <Users size={18} /> Clientes
         </button>
         <button 
           className={`tab-button ${activeTab === 'produtividade' ? 'active' : ''}`}
           onClick={() => handleTabChange('produtividade')}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1rem', background: 'none', border: 'none', borderBottom: activeTab === 'produtividade' ? '2px solid var(--primary-color)' : '2px solid transparent', color: activeTab === 'produtividade' ? 'var(--primary-color)' : 'var(--text-muted)', cursor: 'pointer', fontWeight: 500 }}
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '0.5rem', 
+            padding: '0.6rem 1.25rem', 
+            background: activeTab === 'produtividade' ? 'white' : 'transparent', 
+            border: 'none', 
+            borderRadius: '10px',
+            boxShadow: activeTab === 'produtividade' ? '0 2px 8px rgba(0,0,0,0.08)' : 'none',
+            color: activeTab === 'produtividade' ? 'var(--primary-gold)' : 'var(--text-muted)', 
+            cursor: 'pointer', 
+            fontWeight: 600,
+            transition: 'all 0.2s ease',
+            whiteSpace: 'nowrap'
+          }}
         >
           <Zap size={18} /> Produtividade
         </button>

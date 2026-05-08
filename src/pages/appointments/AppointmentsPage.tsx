@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CalendarCheck, Plus, Filter, ArrowLeft } from 'lucide-react';
+import { CalendarCheck, Plus, Filter } from 'lucide-react';
 import StatCard from '../../components/dashboard/StatCard';
 import Button from '../../components/common/Button';
 import AppointmentList from '../../components/appointments/AppointmentList';
@@ -104,59 +104,47 @@ const AppointmentsPage: React.FC = () => {
           icon={<CalendarCheck size={20} />}
           iconClass="icon-services"
         />
-        
-        <div style={{ display: 'flex', gap: '10px', alignSelf: 'flex-start', marginTop: '10px' }}>
-          {!showForm ? (
-            <Button 
-              variant="action" 
-              onClick={() => { setShowForm(true); setEditingAppointment(null); }}
-              style={{ padding: '0.8rem 1.2rem' }}
-            >
-              <Plus size={18} /> Novo Agendamento
-            </Button>
-          ) : (
-            <Button 
-              variant="action" 
-              onClick={() => { setShowForm(false); setEditingAppointment(null); }}
-              style={{ 
-                padding: '0.8rem 1.2rem',
-                backgroundColor: 'transparent',
-                border: '1px solid var(--primary-gold)',
-                color: 'var(--primary-gold)',
-                boxShadow: 'none'
-              }}
-            >
-              <ArrowLeft size={18} /> Voltar para Lista
-            </Button>
-          )}
-        </div>
       </div>
 
-      {showForm ? (
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+        <div>
+          <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 700 }}>Agenda de Serviços</h2>
+          <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Acompanhe seus compromissos e status de execução</p>
+        </div>
+        <Button 
+          variant="action" 
+          onClick={() => { setShowForm(true); setEditingAppointment(null); }}
+          style={{ padding: '0.8rem 1.5rem' }}
+        >
+          <Plus size={18} /> Novo Agendamento
+        </Button>
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 0.5rem 1rem' }}>
+        <h4 style={{ margin: 0, color: 'var(--text-muted)', fontWeight: 600 }}>Próximos Agendamentos</h4>
+        <div style={{ padding: '0.4rem', backgroundColor: 'rgba(0,0,0,0.03)', borderRadius: '8px', cursor: 'pointer', color: 'var(--text-muted)' }}>
+          <Filter size={18} />
+        </div>
+      </div>
+      
+      {loading ? (
+        <div className="loading-container">Carregando agenda...</div>
+      ) : (
+        <AppointmentList 
+          appointments={appointments}
+          onEdit={openEdit}
+          onStatusChange={handleStatusChange}
+          onCancel={handleCancel}
+        />
+      )}
+
+      {showForm && (
         <AppointmentForm 
           appointment={editingAppointment}
           onSubmit={handleCreateOrUpdate}
           onCancel={() => { setShowForm(false); setEditingAppointment(null); }}
           loading={formLoading}
         />
-      ) : (
-        <>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 0.5rem 1rem' }}>
-            <h4 style={{ margin: 0, color: 'var(--text-muted)' }}>Lista de Agendamentos</h4>
-            <Filter size={18} style={{ color: 'var(--text-muted)', cursor: 'pointer' }} />
-          </div>
-          
-          {loading ? (
-            <div className="loading-container">Carregando agenda...</div>
-          ) : (
-            <AppointmentList 
-              appointments={appointments}
-              onEdit={openEdit}
-              onStatusChange={handleStatusChange}
-              onCancel={handleCancel}
-            />
-          )}
-        </>
       )}
     </>
   );

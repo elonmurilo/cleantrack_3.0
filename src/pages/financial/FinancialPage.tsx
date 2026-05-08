@@ -118,45 +118,44 @@ const FinancialPage: React.FC = () => {
   };
 
   return (
-    <div className="page-container">
-      <div className="page-header mb-6">
+    <div className="screen active">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Controle Financeiro</h1>
-          <p className="text-gray-500">Gerencie entradas, saídas e fluxo de caixa</p>
+          <h1 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 700 }}>Controle Financeiro</h1>
+          <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Gerencie suas entradas, saídas e saúde financeira</p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="action">
-            <Download size={20} />
-            Exportar
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <Button variant="action" style={{ background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-dark)' }}>
+            <Download size={18} /> Exportar
           </Button>
           <Button onClick={handleCreate}>
-            <Plus size={20} />
-            Nova Movimentação
+            <Plus size={18} /> Nova Movimentação
           </Button>
         </div>
       </div>
 
       {summary && <FinancialSummary summary={summary} />}
 
-      <div className="content-card mt-6">
-        <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
-          <div className="search-bar flex-1">
-            <Search size={20} className="search-icon" />
-            <input 
-              type="text" 
-              placeholder="Pesquisar por descrição, categoria ou cliente..." 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
-            />
-          </div>
-          <div className="flex gap-2">
-            <div className="filter-select">
-              <Filter size={20} className="mr-2 text-gray-400" />
+      <div style={{ marginTop: '2rem' }}>
+        <div className="card" style={{ padding: '0.75rem 1rem', marginBottom: '1.5rem', border: '1px solid var(--border-color)' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
+            <div className="input-group" style={{ flex: 1, border: 'none', padding: 0 }}>
+              <Search size={20} color="var(--text-muted)" />
+              <input 
+                type="text" 
+                placeholder="Pesquisar por descrição, categoria ou cliente..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ background: 'none', border: 'none', width: '100%', outline: 'none', padding: '0.5rem 0' }}
+              />
+            </div>
+            
+            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', borderLeft: '1px solid var(--border-color)', paddingLeft: '1rem' }}>
+              <Filter size={18} color="var(--text-muted)" />
               <select 
                 value={filterType} 
                 onChange={(e) => setFilterType(e.target.value)}
-                className="bg-transparent outline-none"
+                style={{ background: 'none', border: 'none', outline: 'none', fontWeight: 500, color: 'var(--text-dark)' }}
               >
                 <option value="todos">Todos os Tipos</option>
                 <option value="entrada">Entradas</option>

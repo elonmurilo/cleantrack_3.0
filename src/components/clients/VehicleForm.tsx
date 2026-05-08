@@ -50,47 +50,55 @@ const VehicleForm: React.FC<VehicleFormProps> = ({
   };
 
   return (
-    <div className="card" style={{ display: 'block', padding: '1.5rem', border: '1px solid var(--primary-gold)' }}>
+    <div className="card" style={{ padding: '1.5rem', border: '1px solid rgba(235, 180, 63, 0.3)', background: 'rgba(235, 180, 63, 0.02)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <h3 style={{ margin: 0, fontSize: '1.1rem' }}>
           {vehicle?.id ? 'Editar Veículo' : 'Adicionar Veículo'}
         </h3>
-        <button onClick={onCancel} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#999' }}>
+        <button onClick={onCancel} className="btn-close">
           <X size={20} />
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="login-form" style={{ gap: '1rem' }}>
-        <div className="input-group">
-          {formData.tipo_veiculo === 'carro' ? <Car size={18} color="var(--primary-gold)" /> : <Bike size={18} color="var(--primary-gold)" />}
-          <select 
-            value={formData.tipo_veiculo}
-            onChange={e => setFormData({ ...formData, tipo_veiculo: e.target.value as 'carro' | 'moto' })}
-            required
-            disabled={loading}
-          >
-            <option value="carro">Carro</option>
-            <option value="moto">Moto</option>
-          </select>
+      <form onSubmit={handleSubmit} className="form-grid">
+        <div className="form-group col-span-2">
+          <label>Tipo de Veículo *</label>
+          <div className="input-group">
+            {formData.tipo_veiculo === 'carro' ? <Car size={18} color="var(--primary-gold)" /> : <Bike size={18} color="var(--primary-gold)" />}
+            <select 
+              value={formData.tipo_veiculo}
+              onChange={e => setFormData({ ...formData, tipo_veiculo: e.target.value as 'carro' | 'moto' })}
+              required
+              disabled={loading}
+            >
+              <option value="carro">Carro</option>
+              <option value="moto">Moto</option>
+            </select>
+          </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+        <div className="form-group">
+          <label>Marca *</label>
           <div className="input-group">
             <Tag size={18} color="var(--primary-gold)" />
             <input 
               type="text" 
-              placeholder={formData.tipo_veiculo === 'moto' ? "Marca (ex: Yamaha) *" : "Marca (ex: Toyota) *"} 
+              placeholder={formData.tipo_veiculo === 'moto' ? "Ex: Yamaha" : "Ex: Toyota"} 
               value={formData.marca}
               onChange={e => setFormData({ ...formData, marca: e.target.value })}
               required 
               disabled={loading}
             />
           </div>
+        </div>
+
+        <div className="form-group">
+          <label>Modelo *</label>
           <div className="input-group">
             {formData.tipo_veiculo === 'moto' ? <Bike size={18} color="var(--primary-gold)" /> : <Car size={18} color="var(--primary-gold)" />}
             <input 
               type="text" 
-              placeholder={formData.tipo_veiculo === 'moto' ? "Modelo (ex: Lander 250cc) *" : "Modelo (ex: Corolla) *"} 
+              placeholder={formData.tipo_veiculo === 'moto' ? "Ex: Lander 250cc" : "Ex: Corolla"} 
               value={formData.modelo}
               onChange={e => setFormData({ ...formData, modelo: e.target.value })}
               required 
@@ -99,22 +107,27 @@ const VehicleForm: React.FC<VehicleFormProps> = ({
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+        <div className="form-group">
+          <label>Cor</label>
           <div className="input-group">
             <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: formData.cor || '#ccc', border: '1px solid #999' }}></div>
             <input 
               type="text" 
-              placeholder="Cor (ex: Prata)" 
+              placeholder="Ex: Prata" 
               value={formData.cor}
               onChange={e => setFormData({ ...formData, cor: e.target.value })}
               disabled={loading}
             />
           </div>
+        </div>
+
+        <div className="form-group">
+          <label>Placa</label>
           <div className="input-group">
             <Tag size={18} color="var(--primary-gold)" />
             <input 
               type="text" 
-              placeholder="Placa (ex: ABC-1234)" 
+              placeholder="Ex: ABC-1234" 
               value={formData.placa}
               onChange={e => setFormData({ ...formData, placa: e.target.value.toUpperCase() })}
               disabled={loading}
@@ -122,61 +135,72 @@ const VehicleForm: React.FC<VehicleFormProps> = ({
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1rem' }}>
+        <div className="form-group">
+          <label>Ano</label>
           <div className="input-group">
             <Calendar size={18} color="var(--primary-gold)" />
             <input 
               type="number" 
-              placeholder="Ano" 
+              placeholder="Ex: 2023" 
               value={formData.ano}
               onChange={e => setFormData({ ...formData, ano: parseInt(e.target.value) })}
               disabled={loading}
             />
           </div>
+        </div>
+
+        <div className="form-group" style={{ display: 'flex', alignItems: 'center' }}>
           <div 
             style={{ 
               display: 'flex', 
               alignItems: 'center', 
-              gap: '0.5rem', 
+              gap: '0.75rem', 
               cursor: 'pointer',
-              color: formData.principal ? 'var(--primary-gold)' : 'var(--text-muted)'
+              color: formData.principal ? 'var(--primary-gold)' : 'var(--text-muted)',
+              padding: '0.75rem',
+              borderRadius: 'var(--radius-md)',
+              border: '1px solid var(--border-color)',
+              width: '100%',
+              marginTop: '1.5rem'
             }}
             onClick={() => setFormData({ ...formData, principal: !formData.principal })}
           >
             {formData.principal ? <CheckCircle size={20} /> : <div style={{ width: 20, height: 20, border: '2px solid #ccc', borderRadius: '50%' }}></div>}
-            <span style={{ fontSize: '0.9rem' }}>Veículo Principal</span>
+            <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>Veículo Principal</span>
           </div>
         </div>
 
-        <div className="input-group" style={{ alignItems: 'flex-start' }}>
-          <Info size={18} color="var(--primary-gold)" style={{ marginTop: '0.5rem' }} />
-          <textarea 
-            placeholder="Observações do veículo" 
-            value={formData.observacoes}
-            onChange={e => setFormData({ ...formData, observacoes: e.target.value })}
-            style={{ minHeight: '60px' }}
-            disabled={loading}
-          />
+        <div className="form-group col-span-2">
+          <label>Observações</label>
+          <div className="input-group" style={{ alignItems: 'flex-start' }}>
+            <Info size={18} color="var(--primary-gold)" style={{ marginTop: '0.5rem' }} />
+            <textarea 
+              placeholder="Ex: Pintura vitrificada, cuidado extra..." 
+              value={formData.observacoes}
+              onChange={e => setFormData({ ...formData, observacoes: e.target.value })}
+              style={{ minHeight: '60px' }}
+              disabled={loading}
+            />
+          </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+        <div className="form-group col-span-2" style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
           <Button 
             type="button" 
             onClick={onCancel}
             style={{ 
               backgroundColor: 'transparent', 
-              border: '1px solid #ddd', 
+              border: '1px solid var(--border-color)', 
               color: 'var(--text-dark)',
               boxShadow: 'none',
-              flex: 1,
-              padding: '1rem'
+              flex: 1
             }}
             disabled={loading}
           >
             Cancelar
           </Button>
           <Button type="submit" disabled={loading} style={{ flex: 1 }}>
-            {loading ? 'Salvando...' : vehicle?.id ? 'Atualizar' : 'Adicionar'}
+            {loading ? 'Salvando...' : vehicle?.id ? 'Atualizar' : 'Adicionar Veículo'}
           </Button>
         </div>
       </form>

@@ -110,154 +110,175 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ appointment, onSubmit
   };
 
   return (
-    <div className="card" style={{ display: 'block', padding: '1.5rem', maxWidth: '500px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <h3 style={{ margin: 0 }}>{appointment ? 'Editar Agendamento' : 'Novo Agendamento'}</h3>
-        <button onClick={onCancel} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#999' }}>
-          <X size={20} />
-        </button>
-      </div>
-
-      <form onSubmit={handleSubmit} className="login-form" style={{ gap: '1rem' }}>
-        <div className="input-group">
-          <User size={18} color="var(--primary-gold)" />
-          <select 
-            value={formData.cliente_id}
-            onChange={handleClientChange}
-            required
-            disabled={loading || fetchingClients}
-          >
-            <option value="" disabled>Selecionar Cliente *</option>
-            {clients.map(c => (
-              <option key={c.id} value={c.id}>{c.nome}</option>
-            ))}
-          </select>
+    <div className="modal-overlay">
+      <div className="modal-content max-w-2xl">
+        <div className="modal-header">
+          <h2>{appointment ? 'Editar Agendamento' : 'Novo Agendamento'}</h2>
+          <button onClick={onCancel} className="btn-close">
+            <X size={20} />
+          </button>
         </div>
 
-        <div className="input-group">
-          <Car size={18} color="var(--primary-gold)" />
-          <select 
-            value={formData.veiculo_id}
-            onChange={e => setFormData({ ...formData, veiculo_id: e.target.value })}
-            disabled={loading || fetchingVehicles || !formData.cliente_id}
-          >
-            <option value="">
-              {fetchingVehicles ? 'Carregando veículos...' : vehicles.length === 0 ? 'Nenhum veículo cadastrado' : 'Selecionar Veículo (Opcional)'}
-            </option>
-            {vehicles.map(v => (
-              <option key={v.id} value={v.id}>
-                {v.tipo_veiculo === 'moto' ? 'Moto' : 'Carro'} - {v.marca} {v.modelo} {v.placa ? `- ${v.placa}` : ''}
-              </option>
-            ))}
-          </select>
+        <div className="modal-body">
+          <form onSubmit={handleSubmit} className="form-grid">
+            <div className="form-group">
+              <label>Cliente *</label>
+              <div className="input-group">
+                <User size={18} color="var(--primary-gold)" />
+                <select 
+                  value={formData.cliente_id}
+                  onChange={handleClientChange}
+                  required
+                  disabled={loading || fetchingClients}
+                >
+                  <option value="" disabled>Selecionar Cliente</option>
+                  {clients.map(c => (
+                    <option key={c.id} value={c.id}>{c.nome}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Veículo</label>
+              <div className="input-group">
+                <Car size={18} color="var(--primary-gold)" />
+                <select 
+                  value={formData.veiculo_id}
+                  onChange={e => setFormData({ ...formData, veiculo_id: e.target.value })}
+                  disabled={loading || fetchingVehicles || !formData.cliente_id}
+                >
+                  <option value="">
+                    {fetchingVehicles ? 'Carregando...' : vehicles.length === 0 ? 'Nenhum veículo' : 'Selecionar Veículo'}
+                  </option>
+                  {vehicles.map(v => (
+                    <option key={v.id} value={v.id}>
+                      {v.tipo_veiculo === 'moto' ? 'Moto' : 'Carro'} - {v.marca} {v.modelo} {v.placa ? `- ${v.placa}` : ''}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {formData.cliente_id && !fetchingVehicles && vehicles.length === 0 && (
+              <div className="form-group col-span-2">
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '0.75rem', 
+                  padding: '1rem', 
+                  backgroundColor: 'rgba(235, 180, 63, 0.05)', 
+                  borderRadius: 'var(--radius-md)',
+                  border: '1px solid rgba(235, 180, 63, 0.2)',
+                  color: '#854D0E',
+                  fontSize: '0.85rem'
+                }}>
+                  <AlertCircle size={18} />
+                  <span>Este cliente não possui veículo cadastrado. O agendamento será salvo sem veículo.</span>
+                </div>
+              </div>
+            )}
+
+            <div className="form-group col-span-2">
+              <label>Título / Serviço Principal *</label>
+              <div className="input-group">
+                <Tag size={18} color="var(--primary-gold)" />
+                <input 
+                  type="text" 
+                  placeholder="Ex: Lavagem Detalhada" 
+                  value={formData.titulo}
+                  onChange={e => setFormData({ ...formData, titulo: e.target.value })}
+                  required 
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Início Agendado *</label>
+              <div className="input-group">
+                <Calendar size={18} color="var(--primary-gold)" />
+                <input 
+                  type="datetime-local" 
+                  value={formData.inicio_agendado}
+                  onChange={e => setFormData({ ...formData, inicio_agendado: e.target.value })}
+                  required 
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Tempo Estimado (Minutos) *</label>
+              <div className="input-group">
+                <Clock size={18} color="var(--primary-gold)" />
+                <input 
+                  type="number" 
+                  placeholder="Ex: 60" 
+                  value={formData.tempo_estimado_minutos}
+                  onChange={e => setFormData({ ...formData, tempo_estimado_minutos: parseInt(e.target.value) })}
+                  min="1"
+                  required 
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            {appointment && (
+              <div className="form-group col-span-2">
+                <label>Status do Agendamento *</label>
+                <div className="input-group">
+                  <Tag size={18} color="var(--primary-gold)" />
+                  <select 
+                    value={formData.status}
+                    onChange={e => setFormData({ ...formData, status: e.target.value as AppointmentStatus })}
+                    required
+                    disabled={loading}
+                  >
+                    <option value="agendado">Agendado</option>
+                    <option value="em_execucao">Em andamento</option>
+                    <option value="finalizado">Finalizado</option>
+                    <option value="cancelado">Cancelado</option>
+                  </select>
+                </div>
+              </div>
+            )}
+
+            <div className="form-group col-span-2">
+              <label>Observações</label>
+              <div className="input-group" style={{ alignItems: 'flex-start' }}>
+                <MessageSquare size={18} color="var(--primary-gold)" style={{ marginTop: '0.5rem' }} />
+                <textarea 
+                  placeholder="Ex: Cliente prefere buscar no fim do dia..." 
+                  value={formData.observacoes}
+                  onChange={e => setFormData({ ...formData, observacoes: e.target.value })}
+                  style={{ minHeight: '80px' }}
+                  disabled={loading}
+                />
+              </div>
+            </div>
+          </form>
         </div>
 
-        {formData.cliente_id && !fetchingVehicles && vehicles.length === 0 && (
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '0.5rem', 
-            padding: '0.75rem', 
-            backgroundColor: '#FFF9E8', 
-            borderRadius: 'var(--radius-md)',
-            border: '1px solid #FFE58F',
-            color: '#854D0E',
-            fontSize: '0.85rem'
-          }}>
-            <AlertCircle size={16} />
-            <span>Este cliente não possui veículo cadastrado. O agendamento será salvo sem veículo.</span>
-          </div>
-        )}
-
-        <div className="input-group">
-          <Tag size={18} color="var(--primary-gold)" />
-          <input 
-            type="text" 
-            placeholder="Título / Serviço Principal *" 
-            value={formData.titulo}
-            onChange={e => setFormData({ ...formData, titulo: e.target.value })}
-            required 
-            disabled={loading}
-          />
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '1rem' }}>
-          <div className="input-group">
-            <Calendar size={18} color="var(--primary-gold)" />
-            <input 
-              type="datetime-local" 
-              value={formData.inicio_agendado}
-              onChange={e => setFormData({ ...formData, inicio_agendado: e.target.value })}
-              required 
-              disabled={loading}
-              style={{ flex: 1 }}
-            />
-          </div>
-
-          <div className="input-group">
-            <Clock size={18} color="var(--primary-gold)" />
-            <input 
-              type="number" 
-              placeholder="Minutos" 
-              value={formData.tempo_estimado_minutos}
-              onChange={e => setFormData({ ...formData, tempo_estimado_minutos: parseInt(e.target.value) })}
-              min="1"
-              required 
-              disabled={loading}
-              title="Tempo estimado em minutos"
-            />
-          </div>
-        </div>
-
-        {appointment && (
-          <div className="input-group">
-            <Tag size={18} color="var(--primary-gold)" />
-            <select 
-              value={formData.status}
-              onChange={e => setFormData({ ...formData, status: e.target.value as AppointmentStatus })}
-              required
-              disabled={loading}
-            >
-              <option value="agendado">Agendado</option>
-              <option value="em_execucao">Em andamento</option>
-              <option value="finalizado">Finalizado</option>
-              <option value="cancelado">Cancelado</option>
-            </select>
-          </div>
-        )}
-
-        <div className="input-group" style={{ alignItems: 'flex-start' }}>
-          <MessageSquare size={18} color="var(--primary-gold)" style={{ marginTop: '0.5rem' }} />
-          <textarea 
-            placeholder="Observações" 
-            value={formData.observacoes}
-            onChange={e => setFormData({ ...formData, observacoes: e.target.value })}
-            style={{ minHeight: '60px' }}
-            disabled={loading}
-          />
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
+        <div className="modal-footer">
           <Button 
             type="button" 
             onClick={onCancel}
             style={{ 
               backgroundColor: 'transparent', 
-              border: '1px solid #ddd', 
+              border: '1px solid var(--border-color)', 
               color: 'var(--text-dark)',
-              boxShadow: 'none',
-              padding: '1rem',
-              marginTop: '1rem'
+              boxShadow: 'none'
             }}
             disabled={loading}
           >
             Cancelar
           </Button>
-          <Button type="submit" disabled={loading}>
-            {loading ? 'Salvando...' : appointment ? 'Salvar' : 'Agendar'}
+          <Button onClick={handleSubmit} disabled={loading}>
+            {loading ? 'Salvando...' : appointment ? 'Salvar Alterações' : 'Confirmar Agendamento'}
           </Button>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

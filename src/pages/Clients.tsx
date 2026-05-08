@@ -173,62 +173,47 @@ const Clients: React.FC = () => {
         />
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '1.5rem 0' }}>
-        <h2 className="section-title" style={{ margin: 0 }}>Gestão de Clientes</h2>
-        {view === 'list' ? (
-          <Button onClick={() => setView('create')}>
-            <PlusCircle size={18} /> Novo Cliente
-          </Button>
-        ) : (
-          <Button 
-            variant="action" 
-            onClick={() => { setView('list'); setSelectedClient(null); }}
-            style={{ 
-              padding: '0.6rem 1rem', 
-              display: 'flex', 
-              gap: '8px', 
-              alignItems: 'center',
-              backgroundColor: 'transparent',
-              border: '1px solid var(--primary-gold)',
-              color: 'var(--primary-gold)',
-              boxShadow: 'none'
-            }}
-          >
-            <ArrowLeft size={18} /> Voltar para Lista
-          </Button>
-        )}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '2rem 0 1.5rem' }}>
+        <div>
+          <h2 className="section-title" style={{ margin: 0 }}>Gestão de Clientes</h2>
+          <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Cadastre e gerencie sua base de clientes e veículos</p>
+        </div>
+        <Button onClick={() => setView('create')}>
+          <PlusCircle size={18} /> Novo Cliente
+        </Button>
       </div>
 
-      {view === 'list' ? (
-        <>
-          <div className="card" style={{ padding: '0.75rem 1rem', marginBottom: '1.5rem' }}>
-            <form onSubmit={handleSearch} style={{ display: 'flex', width: '100%', alignItems: 'center', gap: '0.75rem' }}>
-              <Search size={18} color="#999" />
-              <input 
-                type="text" 
-                placeholder="Pesquisar por nome ou telefone..." 
-                value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
-                style={{ 
-                  background: 'none', 
-                  border: 'none', 
-                  color: 'var(--text-dark)', 
-                  width: '100%', 
-                  outline: 'none',
-                  fontSize: '0.95rem'
-                }}
-              />
-              <Button type="submit" variant="action" style={{ padding: '0.4rem 1rem' }}>Buscar</Button>
-            </form>
+      <div className="card" style={{ padding: '0.75rem 1rem', marginBottom: '1.5rem', border: '1px solid var(--border-color)' }}>
+        <form onSubmit={handleSearch} style={{ display: 'flex', width: '100%', alignItems: 'center', gap: '1rem' }}>
+          <div className="input-group" style={{ flex: 1, border: 'none', padding: 0 }}>
+            <Search size={20} color="var(--text-muted)" />
+            <input 
+              type="text" 
+              placeholder="Pesquisar por nome ou telefone..." 
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              style={{ 
+                background: 'none', 
+                border: 'none', 
+                color: 'var(--text-dark)', 
+                width: '100%', 
+                outline: 'none',
+                fontSize: '1rem',
+                padding: '0.5rem 0'
+              }}
+            />
           </div>
+          <Button type="submit" variant="action" style={{ padding: '0.5rem 1.5rem' }}>Buscar</Button>
+        </form>
+      </div>
 
-          <ClientList 
-            clients={clients} 
-            onEdit={openEdit} 
-            onDelete={handleDelete} 
-          />
-        </>
-      ) : (
+      <ClientList 
+        clients={clients} 
+        onEdit={openEdit} 
+        onDelete={handleDelete} 
+      />
+
+      {view !== 'list' && (
         <ClientForm 
           client={selectedClient}
           onSubmit={view === 'create' ? handleCreate : handleUpdate}
