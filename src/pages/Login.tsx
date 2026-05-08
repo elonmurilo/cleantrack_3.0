@@ -18,7 +18,11 @@ const Login: React.FC = () => {
   useEffect(() => {
     if (!authLoading && session && profile?.ativo) {
       const defaultRoute = getDefaultRoute(profile.papel);
-      navigate(defaultRoute);
+      if (defaultRoute === '/login') {
+        setError('Seu perfil de acesso é inválido ou não foi configurado corretamente.');
+      } else {
+        navigate(defaultRoute);
+      }
     }
   }, [session, profile, authLoading, navigate]);
 
@@ -34,6 +38,13 @@ const Login: React.FC = () => {
       console.error('Login error:', err);
       if (err.message === 'Invalid login credentials') {
         setError('E-mail ou senha incorretos.');
+      } else if (
+        err.message.includes('Registro não encontrado') ||
+        err.message.includes('Sua conta está inativa') ||
+        err.message.includes('Papel inválido') ||
+        err.message.includes('Erro de consulta')
+      ) {
+        setError(err.message);
       } else {
         setError('Ocorreu um erro ao tentar entrar. Verifique sua conexão.');
       }

@@ -73,6 +73,42 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const signIn = async (email: string, password: string) => {
     const { session } = await authService.signIn(email, password);
+    
+    // Validar perfil antes de carregar o estado
+    if (session?.user) {
+      try {
+        const profile = await authService.getUserProfile(session.user.id);
+        
+        if (!profile) {
+          throw new Error('Registro não encontrado.');
+        }
+        
+        if (!profile.ativo) {
+          throw new Error('Sua conta está inativa. Contate o administrador.');
+        }
+
+        if (!['admin', 'gestor', 'operador'].includes(profile.papel)) {
+          throw new Error('Papel inválido: Seu perfil de acesso não foi configurado corretamente.');
+        }
+      } catch (err: any) {
+        await authService.signOut();
+        
+        // Tratar erro PGRST116 (Nenhum registro retornado - pode ser RLS ou ausência real)
+        if (err.code === 'PGRST116') {
+          throw new Error('Registro não encontrado. O perfil não existe ou o RLS está bloqueando a leitura.');
+        }
+        
+        // Propagar nossos próprios erros mapeados
+        if (['Registro não encontrado.', 'Sua conta está inativa. Contate o administrador.', 'Papel inválido: Seu perfil de acesso não foi configurado corretamente.'].includes(err.message)) {
+          throw err;
+        }
+
+        // Erro genérico de consulta/banco
+        console.error('Erro de consulta ao buscar perfil:', err);
+        throw new Error(`Erro de consulta/RLS: ${err.message || JSON.stringify(err)}`);
+      }
+    }
+
     await loadProfile(session);
   };
 

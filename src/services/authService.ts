@@ -44,8 +44,8 @@ export const authService = {
       .single();
 
     if (error) {
-      console.error('Erro ao buscar perfil:', error.message);
-      return null;
+      console.error('Erro detalhado ao buscar perfil:', error);
+      throw error;
     }
 
     return data as UserProfile;
