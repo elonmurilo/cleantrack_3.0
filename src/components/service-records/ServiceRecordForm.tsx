@@ -123,12 +123,18 @@ const ServiceRecordForm: React.FC<ServiceRecordFormProps> = ({
     loadVehicles();
   }, [formData.cliente_id]);
 
+  const normalizeOptionalUuid = (value?: string | null): string | null => {
+    return value && value.trim() !== '' ? value : null;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Converter datas de volta se preenchidas
+    // Converter datas de volta se preenchidas e normalizar UUIDs opcionais
     const payload = {
       ...formData,
+      agendamento_id: normalizeOptionalUuid(formData.agendamento_id),
+      veiculo_id: normalizeOptionalUuid(formData.veiculo_id),
       inicio_realizado_em: formData.inicio_realizado_em ? new Date(formData.inicio_realizado_em).toISOString() : null,
       fim_realizado_em: formData.fim_realizado_em ? new Date(formData.fim_realizado_em).toISOString() : null
     };
@@ -241,7 +247,7 @@ const ServiceRecordForm: React.FC<ServiceRecordFormProps> = ({
         <div className="modal-body">
           <form onSubmit={handleSubmit} className="form-grid">
             <div className="form-group col-span-2">
-              <label>Vincular a um Agendamento (Opcional)</label>
+              <label>Agendamento de origem (opcional)</label>
               <div className="input-group">
                 <Calendar size={18} color="var(--primary-gold)" />
                 <select 
@@ -249,7 +255,7 @@ const ServiceRecordForm: React.FC<ServiceRecordFormProps> = ({
                   onChange={handleAppointmentChange}
                   disabled={loading || fetchingAppointments}
                 >
-                  <option value="">Nenhum agendamento selecionado</option>
+                  <option value="">Sem agendamento vinculado</option>
                   {appointments.filter(a => a.ativo).map(a => (
                     <option key={a.id} value={a.id}>
                       {new Date(a.inicio_agendado).toLocaleDateString()} - {a.titulo} ({a.cliente?.nome})

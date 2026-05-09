@@ -6,6 +6,23 @@ import {
   ServiceRecordStatus 
 } from '../types/serviceRecord';
 
+/**
+ * Normaliza campos UUID opcionais no payload antes de enviar ao Supabase.
+ * Converte strings vazias para null para evitar erro de UUID inválido no PostgreSQL.
+ */
+const normalizePayload = <T extends Record<string, any>>(payload: T): T => {
+  const uuidOptionalFields = ['agendamento_id', 'veiculo_id'];
+  const normalized: Record<string, any> = { ...payload };
+  
+  for (const field of uuidOptionalFields) {
+    if (field in normalized && (!normalized[field] || (typeof normalized[field] === 'string' && normalized[field].trim() === ''))) {
+      normalized[field] = null;
+    }
+  }
+  
+  return normalized as T;
+};
+
 export const serviceRecordService = {
   /**
    * Lista todos os serviços realizados ativos
@@ -51,9 +68,10 @@ export const serviceRecordService = {
    * Cria um novo serviço realizado
    */
   createServiceRecord: async (payload: CreateServiceRecordPayload): Promise<ServiceRecord> => {
+    const normalizedPayload = normalizePayload(payload);
     const { data, error } = await supabase
       .from('servicos_realizados')
-      .insert([payload])
+      .insert([normalizedPayload])
       .select(`
         *,
         cliente:clientes(nome),
@@ -73,9 +91,10 @@ export const serviceRecordService = {
    * Atualiza um serviço realizado existente
    */
   updateServiceRecord: async (id: string, payload: UpdateServiceRecordPayload): Promise<ServiceRecord> => {
+    const normalizedPayload = normalizePayload(payload);
     const { data, error } = await supabase
       .from('servicos_realizados')
-      .update(payload)
+      .update(normalizedPayload)
       .eq('id', id)
       .select(`
         *,

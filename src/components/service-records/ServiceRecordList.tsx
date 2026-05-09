@@ -131,28 +131,28 @@ const ServiceRecordList: React.FC<ServiceRecordListProps> = ({
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div className="avatar" style={{ width: '32px', height: '32px', fontSize: '0.8rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+              <div className="avatar" style={{ width: '32px', height: '32px', fontSize: '0.8rem', flexShrink: 0 }}>
                 <User size={16} />
               </div>
-              <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <div style={{ minWidth: 0 }}>
                 <span className="item-subtext">Cliente</span>
-                <span className="item-name" style={{ fontSize: '0.9rem' }}>{record.cliente?.nome || 'Ex-cliente'}</span>
+                <span className="item-name" style={{ fontSize: '0.9rem', display: 'block', overflowWrap: 'break-word', wordBreak: 'break-word' }}>{record.cliente?.nome || 'Ex-cliente'}</span>
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div className="avatar" style={{ width: '32px', height: '32px', fontSize: '0.8rem', backgroundColor: '#F0F0F0' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+              <div className="avatar" style={{ width: '32px', height: '32px', fontSize: '0.8rem', backgroundColor: '#F0F0F0', flexShrink: 0 }}>
                 {record.veiculo?.tipo_veiculo === 'moto' ? <Bike size={16} /> : <Car size={16} />}
               </div>
-              <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <div style={{ minWidth: 0 }}>
                 <span className="item-subtext">Veículo</span>
-                <span className="item-name" style={{ fontSize: '0.9rem' }}>
+                <span className="item-name" style={{ fontSize: '0.9rem', display: 'block', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
                   {record.veiculo ? (
                     <>
                       <span style={{ fontSize: '0.7rem', textTransform: 'capitalize', color: 'var(--text-muted)' }}>
-                        {record.veiculo.tipo_veiculo || 'Carro'} •
+                        {record.veiculo.tipo_veiculo || 'Carro'} ·
                       </span> {record.veiculo.marca} {record.veiculo.modelo}
                     </>
                   ) : 'Sem veículo'}

@@ -53,9 +53,10 @@ const ServiceRecordsPage: React.FC = () => {
       setShowForm(false);
       setEditingRecord(null);
       fetchRecords();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao salvar registro de serviço:', error);
-      alert('Erro ao salvar registro no banco de dados.');
+      const msg = error?.message || 'Verifique os dados e tente novamente.';
+      alert(`Erro ao salvar serviço: ${msg}`);
     } finally {
       setFormLoading(false);
     }

@@ -2,9 +2,9 @@ export type ServiceRecordStatus = 'aberto' | 'em_execucao' | 'concluido' | 'canc
 
 export interface ServiceRecord {
   id: string;
-  agendamento_id?: string;
+  agendamento_id?: string | null;
   cliente_id: string;
-  veiculo_id?: string;
+  veiculo_id?: string | null;
   titulo: string;
   descricao_servico?: string;
   status: ServiceRecordStatus;
@@ -33,9 +33,9 @@ export interface ServiceRecord {
 }
 
 export interface CreateServiceRecordPayload {
-  agendamento_id?: string;
+  agendamento_id?: string | null;
   cliente_id: string;
-  veiculo_id?: string;
+  veiculo_id?: string | null;
   titulo: string;
   descricao_servico?: string;
   status: ServiceRecordStatus;
@@ -50,9 +50,9 @@ export interface CreateServiceRecordPayload {
 }
 
 export interface UpdateServiceRecordPayload {
-  agendamento_id?: string;
+  agendamento_id?: string | null;
   cliente_id?: string;
-  veiculo_id?: string;
+  veiculo_id?: string | null;
   titulo?: string;
   descricao_servico?: string;
   status?: ServiceRecordStatus;
