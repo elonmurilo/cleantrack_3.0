@@ -106,15 +106,15 @@ const ServiceRecordsPage: React.FC = () => {
         />
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
+        <div style={{ minWidth: 0 }}>
           <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 700 }}>Serviços Realizados</h2>
           <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Gestão técnica e financeira dos serviços executados</p>
         </div>
         <Button 
           variant="action" 
           onClick={() => { setShowForm(true); setEditingRecord(null); }}
-          style={{ padding: '0.8rem 1.5rem' }}
+          style={{ padding: '0.8rem 1.5rem', whiteSpace: 'nowrap' }}
         >
           <Plus size={18} /> Novo Serviço
         </Button>

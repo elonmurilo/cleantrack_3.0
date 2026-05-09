@@ -15,7 +15,7 @@ const ReportFilters: React.FC<ReportFiltersProps> = ({ filters, onChange, active
   };
 
   return (
-    <div className="card" style={{ marginBottom: '2rem', padding: '1.5rem', border: '1px solid var(--border-color)' }}>
+    <div className="card" style={{ marginBottom: '2rem', padding: '1.5rem', border: '1px solid var(--border-color)', display: 'block' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
         <div style={{ padding: '0.5rem', backgroundColor: 'rgba(235, 180, 63, 0.1)', borderRadius: '8px', color: 'var(--primary-gold)' }}>
           <Filter size={20} />

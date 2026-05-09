@@ -173,12 +173,12 @@ const Clients: React.FC = () => {
         />
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '2rem 0 1.5rem' }}>
-        <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', margin: '2rem 0 1.5rem' }}>
+        <div style={{ minWidth: 0 }}>
           <h2 className="section-title" style={{ margin: 0 }}>Gestão de Clientes</h2>
           <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Cadastre e gerencie sua base de clientes e veículos</p>
         </div>
-        <Button onClick={() => setView('create')}>
+        <Button onClick={() => setView('create')} style={{ whiteSpace: 'nowrap' }}>
           <PlusCircle size={18} /> Novo Cliente
         </Button>
       </div>

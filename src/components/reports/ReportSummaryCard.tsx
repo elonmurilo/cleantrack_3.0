@@ -31,13 +31,13 @@ const ReportSummaryCard: React.FC<ReportSummaryCardProps> = ({
   };
 
   return (
-    <div className="card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', position: 'relative', overflow: 'hidden' }}>
+    <div className="card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', position: 'relative', overflow: 'hidden', alignItems: 'stretch', justifyContent: 'flex-start' }}>
       <div style={{ position: 'absolute', top: 0, left: 0, width: '4px', height: '100%', backgroundColor: getColorVar() }}></div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <h4 style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: 500 }}>{title}</h4>
-        {icon && <div style={{ color: getColorVar(), ...bgStyle, padding: '0.5rem', borderRadius: '8px' }}>{icon}</div>}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h4 style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 500 }}>{title}</h4>
+        {icon && <div style={{ color: getColorVar(), ...bgStyle, padding: '0.4rem', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{icon}</div>}
       </div>
-      <div style={{ fontSize: '1.75rem', fontWeight: 700, color: 'var(--text-color)' }}>
+      <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-dark)', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
         {value}
       </div>
       {subtitle && <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{subtitle}</div>}

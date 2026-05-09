@@ -119,16 +119,16 @@ const FinancialPage: React.FC = () => {
 
   return (
     <div className="screen active">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
+        <div style={{ minWidth: 0 }}>
           <h1 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 700 }}>Controle Financeiro</h1>
           <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Gerencie suas entradas, saídas e saúde financeira</p>
         </div>
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <Button variant="action" style={{ background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-dark)' }}>
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', width: '100%', maxWidth: '360px' }}>
+          <Button variant="action" style={{ background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-dark)', flex: '1 1 auto', whiteSpace: 'nowrap' }}>
             <Download size={18} /> Exportar
           </Button>
-          <Button onClick={handleCreate}>
+          <Button onClick={handleCreate} style={{ flex: '1 1 auto', whiteSpace: 'nowrap' }}>
             <Plus size={18} /> Nova Movimentação
           </Button>
         </div>

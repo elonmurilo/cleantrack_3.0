@@ -1,8 +1,18 @@
-* {
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 body {
@@ -10,7 +20,6 @@ body {
     background-color: var(--light-bg);
     color: var(--text-dark);
     line-height: 1.5;
-    overflow-x: hidden;
 }
 
 .screen {
@@ -123,6 +132,8 @@ body {
     display: flex;
     min-height: 100vh;
     width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 .main-wrapper {
@@ -130,6 +141,8 @@ body {
     display: flex;
     flex-direction: column;
     min-width: 0; /* Previne quebra de layout com flex */
+    max-width: 100%;
+    overflow-x: hidden;
     background-color: var(--light-bg);
 }
 
@@ -364,9 +377,11 @@ body {
 
 /* Main Content Views */
 #main-content {
-    padding: 1.5rem;
+    padding: 1rem;
     max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
+    overflow-x: hidden;
 }
 
 /* Components */
@@ -379,11 +394,17 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .card-info {
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
 }
 
 .card-label {
@@ -396,6 +417,8 @@ body {
     font-size: 1.5rem;
     font-weight: 700;
     margin: 0.25rem 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .card-growth {
@@ -406,11 +429,13 @@ body {
 .card-icon {
     width: 45px;
     height: 45px;
+    min-width: 45px;
     border-radius: var(--radius-full);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
+    flex-shrink: 0;
 }
 
 .icon-clients { background: #E1F9EB; color: #34C759; }
@@ -426,6 +451,13 @@ body {
     font-weight: 400;
 }
 
+/* List Container */
+.list-container {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
 /* List Items */
 .list-item {
     background: var(--white);
@@ -434,14 +466,17 @@ body {
     margin-bottom: 0.75rem;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     border: 1px solid #F0F0F0;
+    min-width: 0;
+    max-width: 100%;
 }
 
 .avatar {
     width: 48px;
     height: 48px;
+    min-width: 48px;
     border-radius: var(--radius-full);
     display: flex;
     align-items: center;
@@ -449,22 +484,29 @@ body {
     color: #333;
     font-weight: 600;
     font-size: 0.9rem;
+    flex-shrink: 0;
 }
 
 .item-details {
     flex: 1;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .item-name {
     font-weight: 600;
     font-size: 1rem;
     display: block;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .item-subtext {
     font-size: 0.85rem;
     color: var(--text-muted);
     display: block;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .btn-action {
@@ -595,17 +637,43 @@ body {
     }
 }
 
+/* Mobile-first: dashboard and list grids stack in single column */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 100%;
+}
+
+.list-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Prevent grid children from overflowing */
+.dashboard-grid > *,
+.list-grid > * {
+    min-width: 0;
+    overflow: hidden;
+}
+
 @media (min-width: 768px) {
     .dashboard-grid {
-        display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 1.5rem;
     }
     
     .list-grid {
-        display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 1.5rem;
+    }
+
+    #main-content {
+        padding: 1.5rem;
     }
 }
 
@@ -691,29 +759,34 @@ body {
 /* Table Styles */
 .table-container {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     background: var(--white);
     border-radius: var(--radius-md);
+    width: 100%;
+    max-width: 100%;
 }
 
 .data-table {
     width: 100%;
+    min-width: 500px;
     border-collapse: collapse;
     text-align: left;
 }
 
 .data-table th {
-    padding: 1rem;
+    padding: 0.75rem 0.5rem;
     background: #f9fafb;
     border-bottom: 1px solid var(--border-color);
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
+    white-space: nowrap;
 }
 
 .data-table td {
-    padding: 1rem;
+    padding: 0.75rem 0.5rem;
     border-bottom: 1px solid var(--border-color);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     white-space: nowrap;
 }
 
@@ -885,4 +958,65 @@ body {
     align-items: flex-start;
     flex-wrap: wrap;
     gap: 1rem;
+}
+
+/* ===== Mobile Responsiveness Overrides ===== */
+@media (max-width: 480px) {
+    #main-content {
+        padding: 0.75rem;
+    }
+
+    .card {
+        padding: 0.75rem;
+    }
+
+    .card-value {
+        font-size: 1.25rem;
+    }
+
+    .card-label {
+        font-size: 0.8rem;
+    }
+
+    .list-item {
+        padding: 0.75rem;
+        gap: 0.5rem;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        font-size: 0.8rem;
+    }
+
+    .card-icon {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+    }
+
+    .section-title {
+        font-size: 1rem;
+        margin: 1rem 0 0.75rem;
+    }
+
+    .app-header {
+        padding: 0 0.75rem;
+        height: 60px;
+    }
+
+    #page-title {
+        font-size: 1.1rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 60%;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 0.5rem 0.4rem;
+        font-size: 0.75rem;
+    }
 }

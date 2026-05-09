@@ -108,95 +108,45 @@ const ReportsPage: React.FC = () => {
         display: 'flex', 
         gap: '0.5rem', 
         overflowX: 'auto',
+        WebkitOverflowScrolling: 'touch',
         padding: '4px',
         backgroundColor: 'rgba(0,0,0,0.03)',
         borderRadius: '12px',
-        width: 'fit-content'
+        width: '100%',
+        scrollbarWidth: 'none'
       }}>
-        <button 
-          className={`tab-button ${activeTab === 'financeiro' ? 'active' : ''}`}
-          onClick={() => handleTabChange('financeiro')}
-          style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '0.5rem', 
-            padding: '0.6rem 1.25rem', 
-            background: activeTab === 'financeiro' ? 'white' : 'transparent', 
-            border: 'none', 
-            borderRadius: '10px',
-            boxShadow: activeTab === 'financeiro' ? '0 2px 8px rgba(0,0,0,0.08)' : 'none',
-            color: activeTab === 'financeiro' ? 'var(--primary-gold)' : 'var(--text-muted)', 
-            cursor: 'pointer', 
-            fontWeight: 600,
-            transition: 'all 0.2s ease',
-            whiteSpace: 'nowrap'
-          }}
-        >
-          <DollarSign size={18} /> Financeiro
-        </button>
-        <button 
-          className={`tab-button ${activeTab === 'servicos' ? 'active' : ''}`}
-          onClick={() => handleTabChange('servicos')}
-          style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '0.5rem', 
-            padding: '0.6rem 1.25rem', 
-            background: activeTab === 'servicos' ? 'white' : 'transparent', 
-            border: 'none', 
-            borderRadius: '10px',
-            boxShadow: activeTab === 'servicos' ? '0 2px 8px rgba(0,0,0,0.08)' : 'none',
-            color: activeTab === 'servicos' ? 'var(--primary-gold)' : 'var(--text-muted)', 
-            cursor: 'pointer', 
-            fontWeight: 600,
-            transition: 'all 0.2s ease',
-            whiteSpace: 'nowrap'
-          }}
-        >
-          <Briefcase size={18} /> Serviços
-        </button>
-        <button 
-          className={`tab-button ${activeTab === 'clientes' ? 'active' : ''}`}
-          onClick={() => handleTabChange('clientes')}
-          style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '0.5rem', 
-            padding: '0.6rem 1.25rem', 
-            background: activeTab === 'clientes' ? 'white' : 'transparent', 
-            border: 'none', 
-            borderRadius: '10px',
-            boxShadow: activeTab === 'clientes' ? '0 2px 8px rgba(0,0,0,0.08)' : 'none',
-            color: activeTab === 'clientes' ? 'var(--primary-gold)' : 'var(--text-muted)', 
-            cursor: 'pointer', 
-            fontWeight: 600,
-            transition: 'all 0.2s ease',
-            whiteSpace: 'nowrap'
-          }}
-        >
-          <Users size={18} /> Clientes
-        </button>
-        <button 
-          className={`tab-button ${activeTab === 'produtividade' ? 'active' : ''}`}
-          onClick={() => handleTabChange('produtividade')}
-          style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '0.5rem', 
-            padding: '0.6rem 1.25rem', 
-            background: activeTab === 'produtividade' ? 'white' : 'transparent', 
-            border: 'none', 
-            borderRadius: '10px',
-            boxShadow: activeTab === 'produtividade' ? '0 2px 8px rgba(0,0,0,0.08)' : 'none',
-            color: activeTab === 'produtividade' ? 'var(--primary-gold)' : 'var(--text-muted)', 
-            cursor: 'pointer', 
-            fontWeight: 600,
-            transition: 'all 0.2s ease',
-            whiteSpace: 'nowrap'
-          }}
-        >
-          <Zap size={18} /> Produtividade
-        </button>
+        {([
+          { key: 'financeiro', label: 'Financeiro', icon: <DollarSign size={16} /> },
+          { key: 'servicos', label: 'Serviços', icon: <Briefcase size={16} /> },
+          { key: 'clientes', label: 'Clientes', icon: <Users size={16} /> },
+          { key: 'produtividade', label: 'Produtividade', icon: <Zap size={16} /> },
+        ] as { key: TabType; label: string; icon: React.ReactNode }[]).map(tab => (
+          <button
+            key={tab.key}
+            className={`tab-button ${activeTab === tab.key ? 'active' : ''}`}
+            onClick={() => handleTabChange(tab.key)}
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '0.4rem', 
+              padding: '0.6rem 1rem', 
+              background: activeTab === tab.key ? 'white' : 'transparent', 
+              border: 'none', 
+              borderRadius: '10px',
+              boxShadow: activeTab === tab.key ? '0 2px 8px rgba(0,0,0,0.08)' : 'none',
+              color: activeTab === tab.key ? 'var(--primary-gold)' : 'var(--text-muted)', 
+              cursor: 'pointer', 
+              fontWeight: 600,
+              transition: 'all 0.2s ease',
+              whiteSpace: 'nowrap',
+              flex: '1 0 auto',
+              fontSize: '0.85rem',
+              justifyContent: 'center'
+            }}
+          >
+            {tab.icon} {tab.label}
+          </button>
+        ))}
       </div>
 
       <ReportFilters 

@@ -45,7 +45,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ initialSettings, onSave, lo
   return (
     <form onSubmit={handleSubmit} className="settings-form">
       {/* Empresa */}
-      <div className="card" style={{ marginBottom: '2rem', padding: '2rem', border: '1px solid var(--border-color)' }}>
+      <div className="card" style={{ marginBottom: '2rem', padding: '1.25rem', border: '1px solid var(--border-color)', display: 'block' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '1px solid var(--border-color)' }}>
           <div style={{ padding: '0.5rem', backgroundColor: 'rgba(235, 180, 63, 0.1)', borderRadius: '8px', color: 'var(--primary-gold)' }}>
             <Building size={20} />
@@ -95,7 +95,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ initialSettings, onSave, lo
       </div>
 
       {/* Operação */}
-      <div className="card" style={{ marginBottom: '2rem', padding: '2rem', border: '1px solid var(--border-color)' }}>
+      <div className="card" style={{ marginBottom: '2rem', padding: '1.25rem', border: '1px solid var(--border-color)', display: 'block' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '1px solid var(--border-color)' }}>
           <div style={{ padding: '0.5rem', backgroundColor: 'rgba(235, 180, 63, 0.1)', borderRadius: '8px', color: 'var(--primary-gold)' }}>
             <Clock size={20} />
@@ -171,7 +171,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ initialSettings, onSave, lo
       </div>
 
       {/* Regionalização */}
-      <div className="card" style={{ marginBottom: '2.5rem', padding: '2rem', border: '1px solid var(--border-color)' }}>
+      <div className="card" style={{ marginBottom: '2rem', padding: '1.25rem', border: '1px solid var(--border-color)', display: 'block' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '1px solid var(--border-color)' }}>
           <div style={{ padding: '0.5rem', backgroundColor: 'rgba(235, 180, 63, 0.1)', borderRadius: '8px', color: 'var(--primary-gold)' }}>
             <Globe size={20} />
@@ -219,7 +219,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ initialSettings, onSave, lo
         </div>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', flexWrap: 'wrap' }}>
         <Button type="submit" disabled={loading} style={{ padding: '0.8rem 2.5rem', borderRadius: '12px' }}>
           {loading ? 'Salvando...' : (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
