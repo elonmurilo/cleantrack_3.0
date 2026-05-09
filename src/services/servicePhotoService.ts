@@ -2,14 +2,43 @@ import { supabase } from '../lib/supabase';
 import { 
   ServicePhoto, 
   CreateServicePhotoPayload, 
-  UpdateServicePhotoPayload 
+  UpdateServicePhotoPayload,
+  ServiceMediaType
 } from '../types/servicePhoto';
 
-const BUCKET_NAME = 'servicos-fotos';
+/** Bucket obrigatório para novos uploads (fotos e vídeos) */
+const UPLOAD_BUCKET = 'servicos-midias';
+
+/** Tempo de expiração das signed URLs em segundos (1 hora) */
+const SIGNED_URL_EXPIRY = 3600;
+
+/** MIMEs aceitos para cada tipo de mídia */
+const ACCEPTED_MIMES: Record<ServiceMediaType, string[]> = {
+  foto: ['image/jpeg', 'image/png', 'image/webp'],
+  video: ['video/mp4', 'video/webm', 'video/quicktime']
+};
+
+/** Todos os MIMEs aceitos */
+const ALL_ACCEPTED_MIMES = [...ACCEPTED_MIMES.foto, ...ACCEPTED_MIMES.video];
+
+/**
+ * Detecta o tipo de mídia a partir do MIME type do arquivo.
+ */
+const detectMediaType = (mimeType: string): ServiceMediaType => {
+  if (ACCEPTED_MIMES.video.includes(mimeType)) return 'video';
+  return 'foto';
+};
+
+/**
+ * Valida se o MIME type é aceito pelo sistema.
+ */
+const isValidMime = (mimeType: string): boolean => {
+  return ALL_ACCEPTED_MIMES.includes(mimeType);
+};
 
 export const servicePhotoService = {
   /**
-   * Lista as fotos ativas de um serviço realizado
+   * Lista as mídias ativas de um serviço realizado
    */
   listPhotosByService: async (serviceId: string): Promise<ServicePhoto[]> => {
     const { data, error } = await supabase
@@ -21,7 +50,7 @@ export const servicePhotoService = {
       .order('created_at', { ascending: true });
 
     if (error) {
-      console.error('Erro ao listar fotos do serviço:', error);
+      console.error('Erro ao listar mídias do serviço:', error);
       throw error;
     }
 
@@ -29,27 +58,41 @@ export const servicePhotoService = {
   },
 
   /**
-   * Upload de arquivo para o Storage
+   * Upload de arquivo (foto ou vídeo) para o Storage.
+   * Sempre usa o bucket 'servicos-midias'. Sem fallback.
    */
-  uploadPhoto: async (serviceId: string, file: File): Promise<{ path: string; name: string }> => {
+  uploadMedia: async (serviceId: string, file: File): Promise<{ path: string; name: string; bucket: string }> => {
+    if (!isValidMime(file.type)) {
+      throw new Error(
+        `Tipo de arquivo não suportado: ${file.type}. ` +
+        `Formatos aceitos: JPEG, PNG, WebP (fotos), MP4, WebM, MOV (vídeos).`
+      );
+    }
+
     const fileExt = file.name.split('.').pop();
     const fileName = `${crypto.randomUUID()}.${fileExt}`;
     const filePath = `${serviceId}/${fileName}`;
 
+    console.log(`[Upload] Bucket: "${UPLOAD_BUCKET}" | Caminho: "${filePath}" | MIME: ${file.type} | Tamanho: ${file.size} bytes`);
+
     const { error: uploadError } = await supabase.storage
-      .from(BUCKET_NAME)
-      .upload(filePath, file);
+      .from(UPLOAD_BUCKET)
+      .upload(filePath, file, {
+        contentType: file.type,
+        upsert: false
+      });
 
     if (uploadError) {
-      console.error('Erro ao fazer upload da foto:', uploadError);
+      console.error(`[Upload ERRO] Bucket: "${UPLOAD_BUCKET}" | Caminho: "${filePath}" | Erro:`, uploadError);
       throw uploadError;
     }
 
-    return { path: filePath, name: fileName };
+    console.log(`[Upload OK] Bucket: "${UPLOAD_BUCKET}" | Caminho: "${filePath}"`);
+    return { path: filePath, name: fileName, bucket: UPLOAD_BUCKET };
   },
 
   /**
-   * Registra metadados da foto no banco
+   * Registra metadados da mídia no banco
    */
   createPhotoRecord: async (payload: CreateServicePhotoPayload): Promise<ServicePhoto> => {
     const { data, error } = await supabase
@@ -59,7 +102,7 @@ export const servicePhotoService = {
       .single();
 
     if (error) {
-      console.error('Erro ao criar registro da foto:', error);
+      console.error('Erro ao criar registro da mídia:', error);
       throw error;
     }
 
@@ -67,7 +110,7 @@ export const servicePhotoService = {
   },
 
   /**
-   * Atualiza metadados de uma foto
+   * Atualiza metadados de uma mídia
    */
   updatePhotoRecord: async (id: string, payload: UpdateServicePhotoPayload): Promise<ServicePhoto> => {
     const { data, error } = await supabase
@@ -78,7 +121,7 @@ export const servicePhotoService = {
       .single();
 
     if (error) {
-      console.error('Erro ao atualizar registro da foto:', error);
+      console.error('Erro ao atualizar registro da mídia:', error);
       throw error;
     }
 
@@ -86,7 +129,7 @@ export const servicePhotoService = {
   },
 
   /**
-   * Desativação lógica da foto
+   * Desativação lógica da mídia
    */
   deactivatePhoto: async (id: string, userId: string): Promise<void> => {
     const { error } = await supabase
@@ -95,19 +138,40 @@ export const servicePhotoService = {
       .eq('id', id);
 
     if (error) {
-      console.error('Erro ao desativar foto:', error);
+      console.error('Erro ao desativar mídia:', error);
       throw error;
     }
   },
 
   /**
-   * Obtém a URL pública da foto
+   * Obtém uma signed URL para exibição de mídia em bucket privado.
+   * Respeita o bucket salvo no registro para compatibilidade com registros antigos.
    */
-  getPhotoPublicUrl: (path: string): string => {
-    const { data } = supabase.storage
-      .from(BUCKET_NAME)
-      .getPublicUrl(path);
+  getMediaSignedUrl: async (path: string, bucket: string): Promise<string> => {
+    console.log(`[SignedURL] Bucket: "${bucket}" | Caminho: "${path}"`);
 
-    return data.publicUrl;
-  }
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .createSignedUrl(path, SIGNED_URL_EXPIRY);
+
+    if (error) {
+      console.error(`[SignedURL ERRO] Bucket: "${bucket}" | Caminho: "${path}" | Erro:`, error);
+      // Fallback: tentar construir URL pública (funciona se bucket ou policy permitir)
+      const { data: publicData } = supabase.storage
+        .from(bucket)
+        .getPublicUrl(path);
+      return publicData.publicUrl;
+    }
+
+    return data.signedUrl;
+  },
+
+  /** Helper: detecta tipo de mídia pelo MIME */
+  detectMediaType,
+
+  /** Helper: verifica se MIME é válido */
+  isValidMime,
+
+  /** String de accept para o input file */
+  ACCEPT_STRING: ALL_ACCEPTED_MIMES.join(',')
 };

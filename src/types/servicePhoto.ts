@@ -1,9 +1,11 @@
 export type ServicePhotoType = 'antes' | 'depois' | 'geral';
+export type ServiceMediaType = 'foto' | 'video';
 
 export interface ServicePhoto {
   id: string;
   servico_realizado_id: string;
   tipo: ServicePhotoType;
+  tipo_midia: ServiceMediaType;
   bucket: string;
   caminho_arquivo: string;
   nome_arquivo: string;
@@ -21,6 +23,7 @@ export interface ServicePhoto {
 export interface CreateServicePhotoPayload {
   servico_realizado_id: string;
   tipo: ServicePhotoType;
+  tipo_midia: ServiceMediaType;
   bucket: string;
   caminho_arquivo: string;
   nome_arquivo: string;
@@ -34,6 +37,7 @@ export interface CreateServicePhotoPayload {
 
 export interface UpdateServicePhotoPayload {
   tipo?: ServicePhotoType;
+  tipo_midia?: ServiceMediaType;
   ordem?: number;
   legenda?: string;
   ativo?: boolean;

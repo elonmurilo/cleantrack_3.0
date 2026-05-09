@@ -439,7 +439,7 @@ const ServiceRecordForm: React.FC<ServiceRecordFormProps> = ({
             <div style={{ marginTop: '2.5rem', paddingTop: '2.5rem', borderTop: '2px solid var(--border-color)' }}>
               <h4 style={{ marginBottom: '1.5rem', fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-dark)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <div style={{ width: '4px', height: '20px', backgroundColor: 'var(--primary-gold)', borderRadius: '2px' }}></div>
-                Galeria do Atendimento
+                Mídias do Serviço
               </h4>
               
               <ServicePhotoUpload 

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Upload, X, AlertCircle, Image as ImageIcon } from 'lucide-react';
+import { Upload, X, AlertCircle, Image as ImageIcon, Film } from 'lucide-react';
 import { servicePhotoService } from '../../services/servicePhotoService';
 import { ServicePhotoType } from '../../types/servicePhoto';
 import { useAuth } from '../../hooks/useAuth';
@@ -14,6 +14,7 @@ const ServicePhotoUpload: React.FC<ServicePhotoUploadProps> = ({ serviceId, onUp
   const { user } = useAuth();
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [isVideo, setIsVideo] = useState(false);
   const [tipo, setTipo] = useState<ServicePhotoType>('geral');
   const [legenda, setLegenda] = useState('');
   const [uploading, setUploading] = useState(false);
@@ -23,18 +24,27 @@ const ServicePhotoUpload: React.FC<ServicePhotoUploadProps> = ({ serviceId, onUp
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
-      if (!selectedFile.type.startsWith('image/')) {
-        setError('Por favor, selecione uma imagem válida.');
+      if (!servicePhotoService.isValidMime(selectedFile.type)) {
+        setError('Formato não suportado. Aceitos: JPEG, PNG, WebP (fotos), MP4, WebM, MOV (vídeos).');
         return;
       }
       setFile(selectedFile);
       setError(null);
-      
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result as string);
-      };
-      reader.readAsDataURL(selectedFile);
+
+      const fileIsVideo = selectedFile.type.startsWith('video/');
+      setIsVideo(fileIsVideo);
+
+      if (fileIsVideo) {
+        // Video preview via object URL
+        setPreview(URL.createObjectURL(selectedFile));
+      } else {
+        // Image preview via FileReader
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview(reader.result as string);
+        };
+        reader.readAsDataURL(selectedFile);
+      }
     }
   };
 
@@ -45,14 +55,18 @@ const ServicePhotoUpload: React.FC<ServicePhotoUploadProps> = ({ serviceId, onUp
     setError(null);
 
     try {
-      // 1. Upload to Storage
-      const { path, name } = await servicePhotoService.uploadPhoto(serviceId, file);
+      // 1. Upload to Storage (novo bucket servicos-midias)
+      const { path, name, bucket } = await servicePhotoService.uploadMedia(serviceId, file);
 
-      // 2. Create record in DB
+      // 2. Detectar tipo de mídia
+      const tipoMidia = servicePhotoService.detectMediaType(file.type);
+
+      // 3. Create record in DB
       await servicePhotoService.createPhotoRecord({
         servico_realizado_id: serviceId,
         tipo,
-        bucket: 'servicos-fotos',
+        tipo_midia: tipoMidia,
+        bucket,
         caminho_arquivo: path,
         nome_arquivo: name,
         mime_type: file.type,
@@ -61,27 +75,37 @@ const ServicePhotoUpload: React.FC<ServicePhotoUploadProps> = ({ serviceId, onUp
         created_by: user.id
       });
 
-      // 3. Success
+      // 4. Success - cleanup
+      if (isVideo && preview) {
+        URL.revokeObjectURL(preview);
+      }
       setFile(null);
       setPreview(null);
+      setIsVideo(false);
       setLegenda('');
       onUploadSuccess();
     } catch (err: any) {
       console.error('Erro no upload:', err);
-      setError(err.message || 'Erro ao enviar a foto. Verifique sua conexão.');
+      setError(err.message || 'Erro ao enviar o arquivo. Verifique sua conexão.');
     } finally {
       setUploading(false);
     }
   };
 
   const clearSelection = () => {
+    if (isVideo && preview) {
+      URL.revokeObjectURL(preview);
+    }
     setFile(null);
     setPreview(null);
+    setIsVideo(false);
     setError(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
+
+  const mediaTypeLabel = isVideo ? 'Vídeo' : 'Foto';
 
   return (
     <div className="photo-upload-container" style={{ 
@@ -92,7 +116,7 @@ const ServicePhotoUpload: React.FC<ServicePhotoUploadProps> = ({ serviceId, onUp
     }}>
       <h4 style={{ margin: '0 0 1rem 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
         <Upload size={18} color="var(--primary-gold)" />
-        Adicionar Foto ao Serviço
+        Adicionar Foto ou Vídeo
       </h4>
 
       {!preview ? (
@@ -109,24 +133,38 @@ const ServicePhotoUpload: React.FC<ServicePhotoUploadProps> = ({ serviceId, onUp
             color: 'var(--text-muted)'
           }}
         >
-          <ImageIcon size={40} strokeWidth={1} />
-          <span>Clique para selecionar uma foto</span>
+          <div style={{ display: 'flex', gap: '1rem' }}>
+            <ImageIcon size={36} strokeWidth={1} />
+            <Film size={36} strokeWidth={1} />
+          </div>
+          <span>Clique para selecionar uma foto ou vídeo</span>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+            JPEG, PNG, WebP, MP4, WebM, MOV
+          </span>
           <input 
             type="file" 
             ref={fileInputRef} 
             onChange={handleFileChange} 
-            accept="image/*" 
+            accept={servicePhotoService.ACCEPT_STRING}
             style={{ display: 'none' }} 
           />
         </div>
       ) : (
         <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
-          <div style={{ position: 'relative', width: '200px', height: '150px' }}>
-            <img 
-              src={preview} 
-              alt="Preview" 
-              style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }} 
-            />
+          <div style={{ position: 'relative', width: '200px', minHeight: '120px' }}>
+            {isVideo ? (
+              <video 
+                src={preview} 
+                controls
+                style={{ width: '100%', maxHeight: '200px', borderRadius: '8px', backgroundColor: '#000' }} 
+              />
+            ) : (
+              <img 
+                src={preview} 
+                alt="Preview" 
+                style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '8px' }} 
+              />
+            )}
             <button 
               onClick={clearSelection}
               style={{ 
@@ -147,9 +185,28 @@ const ServicePhotoUpload: React.FC<ServicePhotoUploadProps> = ({ serviceId, onUp
             >
               <X size={14} />
             </button>
+
+            {/* Badge indicando tipo de mídia */}
+            <div style={{
+              position: 'absolute',
+              bottom: '8px',
+              left: '8px',
+              backgroundColor: isVideo ? 'rgba(0,122,255,0.85)' : 'rgba(52,199,89,0.85)',
+              color: 'white',
+              fontSize: '0.7rem',
+              fontWeight: 600,
+              padding: '2px 8px',
+              borderRadius: '4px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
+            }}>
+              {isVideo ? <Film size={10} /> : <ImageIcon size={10} />}
+              {mediaTypeLabel}
+            </div>
           </div>
 
-          <div style={{ flex: 1, minWidth: '250px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div style={{ flex: 1, minWidth: '200px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <div className="input-group" style={{ marginBottom: 0 }}>
               <select 
                 value={tipo} 
@@ -157,9 +214,9 @@ const ServicePhotoUpload: React.FC<ServicePhotoUploadProps> = ({ serviceId, onUp
                 style={{ width: '100%' }}
                 disabled={uploading}
               >
-                <option value="antes">Foto de ANTES</option>
-                <option value="depois">Foto de DEPOIS</option>
-                <option value="geral">Foto GERAL</option>
+                <option value="antes">{mediaTypeLabel} de ANTES</option>
+                <option value="depois">{mediaTypeLabel} de DEPOIS</option>
+                <option value="geral">{mediaTypeLabel} GERAL</option>
               </select>
             </div>
 
@@ -172,6 +229,12 @@ const ServicePhotoUpload: React.FC<ServicePhotoUploadProps> = ({ serviceId, onUp
                 disabled={uploading}
               />
             </div>
+
+            {file && (
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                {file.name} · {(file.size / 1024 / 1024).toFixed(2)} MB
+              </div>
+            )}
 
             <div style={{ display: 'flex', gap: '10px' }}>
               <Button 
