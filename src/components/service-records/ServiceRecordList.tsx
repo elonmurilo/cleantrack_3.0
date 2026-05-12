@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { ServiceRecord, ServiceRecordStatus } from '../../types/serviceRecord';
 import Button from '../common/Button';
+import GenerateServiceReportButton from './GenerateServiceReportButton';
 
 interface ServiceRecordListProps {
   records: ServiceRecord[];
@@ -65,8 +66,8 @@ const ServiceRecordList: React.FC<ServiceRecordListProps> = ({
     <div className="list-grid">
       {records.map((record) => (
         <div key={record.id} className="list-item card" style={{ display: 'block', padding: '1.25rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-            <div>
+          {/* 1. Cabeçalho: título + status + ref */}
+          <div style={{ marginBottom: '1rem' }}>
               <h3 style={{ margin: 0, fontSize: '1.1rem', color: 'var(--text-dark)' }}>{record.titulo}</h3>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
                 {getStatusBadge(record.status)}
@@ -74,9 +75,74 @@ const ServiceRecordList: React.FC<ServiceRecordListProps> = ({
                   Ref: {record.id.slice(0, 8)}
                 </span>
               </div>
+          </div>
+
+          {/* 2. Corpo: cliente + veículo */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+              <div className="avatar" style={{ width: '32px', height: '32px', fontSize: '0.8rem', flexShrink: 0 }}>
+                <User size={16} />
+              </div>
+              <div style={{ minWidth: 0 }}>
+                <span className="item-subtext">Cliente</span>
+                <span className="item-name" style={{ fontSize: '0.9rem', display: 'block', overflowWrap: 'break-word', wordBreak: 'break-word' }}>{record.cliente?.nome || 'Ex-cliente'}</span>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+              <div className="avatar" style={{ width: '32px', height: '32px', fontSize: '0.8rem', backgroundColor: '#F0F0F0', flexShrink: 0 }}>
+                {record.veiculo?.tipo_veiculo === 'moto' ? <Bike size={16} /> : <Car size={16} />}
+              </div>
+              <div style={{ minWidth: 0 }}>
+                <span className="item-subtext">Veículo</span>
+                <span className="item-name" style={{ fontSize: '0.9rem', display: 'block', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
+                  {record.veiculo ? (
+                    <>
+                      <span style={{ fontSize: '0.7rem', textTransform: 'capitalize', color: 'var(--text-muted)' }}>
+                        {record.veiculo.tipo_veiculo || 'Carro'} ·
+                      </span> {record.veiculo.marca} {record.veiculo.modelo}
+                    </>
+                  ) : 'Sem veículo'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* 3. Rodapé informativo: tempo + valor + data */}
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            paddingTop: '0.75rem', 
+            borderTop: '1px solid #f0f0f0',
+            fontSize: '0.85rem'
+          }}>
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--text-muted)' }}>
+                <Clock size={14} />
+                <span>{record.tempo_real_minutos || record.tempo_estimado_minutos} min</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--text-dark)', fontWeight: '600' }}>
+                <DollarSign size={14} />
+                <span>{record.valor_cobrado.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+              </div>
             </div>
             
-            <div className="item-actions" style={{ display: 'flex', gap: '8px' }}>
+            <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>
+              {formatDate(record.created_at)}
+            </div>
+          </div>
+
+          {/* 4. Rodapé de ações */}
+          <div style={{ 
+            display: 'flex', 
+            flexWrap: 'wrap',
+            gap: '8px', 
+            paddingTop: '0.75rem', 
+            marginTop: '0.75rem', 
+            borderTop: '1px solid #f0f0f0',
+            justifyContent: 'flex-end'
+          }}>
               <Button 
                 variant="action" 
                 onClick={() => onEdit(record)}
@@ -85,6 +151,8 @@ const ServiceRecordList: React.FC<ServiceRecordListProps> = ({
               >
                 <Edit2 size={16} />
               </Button>
+
+              <GenerateServiceReportButton serviceId={record.id} />
               
               {record.status === 'aberto' && (
                 <Button 
@@ -128,61 +196,6 @@ const ServiceRecordList: React.FC<ServiceRecordListProps> = ({
               >
                 <Trash2 size={16} />
               </Button>
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
-              <div className="avatar" style={{ width: '32px', height: '32px', fontSize: '0.8rem', flexShrink: 0 }}>
-                <User size={16} />
-              </div>
-              <div style={{ minWidth: 0 }}>
-                <span className="item-subtext">Cliente</span>
-                <span className="item-name" style={{ fontSize: '0.9rem', display: 'block', overflowWrap: 'break-word', wordBreak: 'break-word' }}>{record.cliente?.nome || 'Ex-cliente'}</span>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
-              <div className="avatar" style={{ width: '32px', height: '32px', fontSize: '0.8rem', backgroundColor: '#F0F0F0', flexShrink: 0 }}>
-                {record.veiculo?.tipo_veiculo === 'moto' ? <Bike size={16} /> : <Car size={16} />}
-              </div>
-              <div style={{ minWidth: 0 }}>
-                <span className="item-subtext">Veículo</span>
-                <span className="item-name" style={{ fontSize: '0.9rem', display: 'block', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
-                  {record.veiculo ? (
-                    <>
-                      <span style={{ fontSize: '0.7rem', textTransform: 'capitalize', color: 'var(--text-muted)' }}>
-                        {record.veiculo.tipo_veiculo || 'Carro'} ·
-                      </span> {record.veiculo.marca} {record.veiculo.modelo}
-                    </>
-                  ) : 'Sem veículo'}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center', 
-            paddingTop: '1rem', 
-            borderTop: '1px solid #f0f0f0',
-            fontSize: '0.85rem'
-          }}>
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--text-muted)' }}>
-                <Clock size={14} />
-                <span>{record.tempo_real_minutos || record.tempo_estimado_minutos} min</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--text-dark)', fontWeight: '600' }}>
-                <DollarSign size={14} />
-                <span>{record.valor_cobrado.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
-              </div>
-            </div>
-            
-            <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>
-              {formatDate(record.created_at)}
-            </div>
           </div>
         </div>
       ))}
