@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { 
+import { useNavigate } from 'react-router-dom';
+import {
   Users, 
   CalendarCheck, 
   DollarSign, 
@@ -19,6 +20,7 @@ import { DashboardData } from '../types/dashboard';
 import { formatCurrency, formatDate, formatTime } from '../utils/formatters';
 
 const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -195,7 +197,7 @@ const Dashboard: React.FC = () => {
                     <span className="item-subtext">{client.telefone}</span>
                     <span className="item-subtext text-xs">Cadastrado em: {formatDate(client.created_at)}</span>
                   </div>
-                  <Button variant="action" size="sm">
+                  <Button variant="action" size="sm" onClick={() => navigate(`/clientes?id=${client.id}`)} title="Ver detalhes do cliente">
                     <ChevronRight size={14} />
                   </Button>
                 </div>

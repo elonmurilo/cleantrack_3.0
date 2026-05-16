@@ -47,72 +47,88 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ user, currentUserId, isOp
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={e => e.stopPropagation()}>
+      <div className="modal-content max-w-2xl" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Editar Usuário</h2>
-          <button className="btn-icon" onClick={onClose} aria-label="Fechar modal">
+          <button className="btn-close" onClick={onClose} aria-label="Fechar modal">
             <X size={20} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="form-grid">
-          <div className="form-group full-width">
-            <label>E-mail (Login)</label>
-            <input 
-              type="email" 
-              value={user.email} 
-              disabled 
-              style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-muted)' }}
-              title="A alteração de e-mail não é permitida por aqui."
-            />
-          </div>
-
-          <div className="form-group full-width">
-            <label htmlFor="nome">Nome</label>
-            <input 
-              id="nome"
-              type="text" 
-              value={nome} 
-              onChange={e => setNome(e.target.value)} 
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="papel">Papel / Perfil</label>
-            <select 
-              id="papel" 
-              value={papel} 
-              onChange={e => setPapel(e.target.value as UserRole)}
-            >
-              <option value="admin">Administrador</option>
-              <option value="gestor">Gestor</option>
-              <option value="operador">Operador</option>
-            </select>
-          </div>
-
-          <div className="form-group" style={{ display: 'flex', alignItems: 'center', marginTop: '1.5rem' }}>
-            <label style={{ display: 'flex', alignItems: 'center', cursor: isSelf ? 'not-allowed' : 'pointer', gap: '0.5rem', marginBottom: 0 }}>
+        <form onSubmit={handleSubmit} className="modal-body">
+          <div className="form-grid">
+            <div className="form-group col-span-2">
+              <label>E-mail (Login)</label>
               <input 
-                type="checkbox" 
-                checked={ativo} 
-                onChange={e => setAtivo(e.target.checked)} 
-                disabled={isSelf} 
-                style={{ width: 'auto', marginBottom: 0 }}
+                type="email" 
+                className="form-control"
+                value={user.email} 
+                disabled 
+                style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-muted)', cursor: 'not-allowed' }}
+                title="A alteração de e-mail não é permitida por aqui."
               />
-              Usuário Ativo
-            </label>
-            {isSelf && <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginLeft: '0.5rem' }}>(Você não pode inativar a si mesmo)</span>}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="nome">Nome</label>
+              <input 
+                id="nome"
+                type="text"
+                className="form-control"
+                value={nome} 
+                onChange={e => setNome(e.target.value)} 
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="papel">Papel / Perfil</label>
+              <select 
+                id="papel" 
+                className="form-control"
+                value={papel} 
+                onChange={e => setPapel(e.target.value as UserRole)}
+              >
+                <option value="admin">Administrador</option>
+                <option value="gestor">Gestor</option>
+                <option value="operador">Operador</option>
+              </select>
+            </div>
+
+            <div className="form-group col-span-2" style={{ padding: '1rem', backgroundColor: 'var(--bg-secondary, #f8fafc)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div>
+                <label style={{ display: 'block', fontWeight: 600, color: 'var(--text-dark)', marginBottom: '0.25rem', cursor: isSelf ? 'not-allowed' : 'pointer' }}>
+                  Status do Usuário
+                </label>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                  {isSelf ? 'Você não pode inativar a si mesmo.' : 'Desativar impede o acesso ao sistema.'}
+                </span>
+              </div>
+              
+              <label style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', cursor: isSelf ? 'not-allowed' : 'pointer' }}>
+                <input 
+                  type="checkbox" 
+                  checked={ativo} 
+                  onChange={e => setAtivo(e.target.checked)} 
+                  disabled={isSelf} 
+                  className="toggle-checkbox"
+                  style={{ width: '1.25rem', height: '1.25rem', accentColor: 'var(--primary-gold)', cursor: isSelf ? 'not-allowed' : 'pointer' }}
+                />
+                <span style={{ marginLeft: '0.5rem', fontWeight: 500, color: ativo ? 'var(--text-dark)' : 'var(--text-muted)' }}>
+                  {ativo ? 'Ativo' : 'Inativo'}
+                </span>
+              </label>
+            </div>
+
+            {error && (
+              <div className="form-group col-span-2" style={{ color: 'var(--danger-color)', fontSize: '0.9rem' }}>
+                {error}
+              </div>
+            )}
           </div>
 
-          {error && (
-            <div className="form-group full-width" style={{ color: 'var(--danger-color)', fontSize: '0.9rem' }}>
-              {error}
-            </div>
-          )}
-
-          <div className="modal-actions full-width" style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
-            <Button type="button" variant="secondary" onClick={onClose} disabled={loading}>
+          <div className="modal-footer mt-6">
+            <Button type="button" variant="action" onClick={onClose} disabled={loading} style={{ background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-dark)' }}>
               Cancelar
             </Button>
             <Button type="submit" disabled={loading}>

@@ -11,6 +11,7 @@ import FinancialSummary from '../../components/financial/FinancialSummary';
 import FinancialList from '../../components/financial/FinancialList';
 import FinancialForm from '../../components/financial/FinancialForm';
 import Button from '../../components/common/Button';
+import { exportToCsv } from '../../utils/exportCsv';
 
 const FinancialPage: React.FC = () => {
   const auth = useContext(AuthContext);
@@ -117,6 +118,54 @@ const FinancialPage: React.FC = () => {
     }
   };
 
+  const handleExport = () => {
+    if (filteredRecords.length === 0) {
+      alert('Não há dados para exportar com os filtros atuais.');
+      return;
+    }
+
+    const headers = [
+      'Data de competência',
+      'Data de pagamento',
+      'Tipo',
+      'Status',
+      'Descrição',
+      'Categoria',
+      'Forma de pagamento',
+      'Cliente',
+      'Serviço vinculado',
+      'Valor',
+      'Observações'
+    ];
+
+    const data = filteredRecords.map(r => {
+      // Formatação de data
+      const formatData = (d: string | null | undefined) => d ? new Date(d).toLocaleDateString('pt-BR') : '';
+      
+      // Formatação de valor (Ex: 1500.50 -> R$ 1.500,50)
+      const formatValor = (v: number) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+      return [
+        formatData(r.data_competencia),
+        formatData(r.data_pagamento),
+        r.tipo === 'entrada' ? 'Entrada' : 'Saída',
+        r.status.charAt(0).toUpperCase() + r.status.slice(1),
+        r.descricao,
+        r.categoria,
+        r.forma_pagamento ? r.forma_pagamento.toUpperCase() : '',
+        r.cliente?.nome || '',
+        r.servico_realizado?.titulo || '',
+        formatValor(r.valor),
+        r.observacoes || ''
+      ];
+    });
+
+    const dataAtual = new Date().toISOString().split('T')[0];
+    const filename = `faturamento-cleantrack-${dataAtual}.csv`;
+
+    exportToCsv(filename, headers, data);
+  };
+
   return (
     <div className="screen active">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
@@ -125,8 +174,8 @@ const FinancialPage: React.FC = () => {
           <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Gerencie suas entradas, saídas e saúde financeira</p>
         </div>
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', width: '100%', maxWidth: '360px' }}>
-          <Button variant="action" style={{ background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-dark)', flex: '1 1 auto', whiteSpace: 'nowrap' }}>
-            <Download size={18} /> Exportar
+          <Button onClick={handleExport} variant="action" style={{ background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-dark)', flex: '1 1 auto', whiteSpace: 'nowrap' }}>
+            <Download size={18} /> Exportar CSV
           </Button>
           <Button onClick={handleCreate} style={{ flex: '1 1 auto', whiteSpace: 'nowrap' }}>
             <Plus size={18} /> Nova Movimentação

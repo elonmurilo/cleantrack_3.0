@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Users, Search, PlusCircle, ArrowLeft } from 'lucide-react';
 import StatCard from '../components/dashboard/StatCard';
 import { clientService } from '../services/clientService';
@@ -21,6 +22,12 @@ const Clients: React.FC = () => {
   const [selectedClient, setSelectedClient] = useState<Cliente | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const openEdit = (client: Cliente) => {
+    setSelectedClient(client);
+    setView('edit');
+  };
 
   const loadData = async () => {
     setLoading(true);
@@ -41,6 +48,23 @@ const Clients: React.FC = () => {
   useEffect(() => {
     loadData();
   }, []);
+
+  // Handle direct link to open client details
+  useEffect(() => {
+    const id = searchParams.get('id');
+    if (id && clients.length > 0) {
+      const client = clients.find(c => c.id === id);
+      if (client) {
+        openEdit(client);
+        // Remove param from URL to prevent reopening on reload
+        const newParams = new URLSearchParams(searchParams);
+        newParams.delete('id');
+        setSearchParams(newParams, { replace: true });
+      } else {
+        console.warn(`Cliente não encontrado para o ID: ${id}`);
+      }
+    }
+  }, [clients, searchParams, setSearchParams]);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -149,11 +173,6 @@ const Clients: React.FC = () => {
       alert("Erro ao desativar cliente.");
       console.error(error);
     }
-  };
-
-  const openEdit = (client: Cliente) => {
-    setSelectedClient(client);
-    setView('edit');
   };
 
   if (loading && view === 'list' && clients.length === 0) {

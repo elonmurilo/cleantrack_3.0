@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CalendarCheck, Plus, Filter } from 'lucide-react';
+import { CalendarCheck, Plus } from 'lucide-react';
 import StatCard from '../../components/dashboard/StatCard';
 import Button from '../../components/common/Button';
 import AppointmentList from '../../components/appointments/AppointmentList';
@@ -122,9 +122,6 @@ const AppointmentsPage: React.FC = () => {
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 0.5rem 1rem' }}>
         <h4 style={{ margin: 0, color: 'var(--text-muted)', fontWeight: 600 }}>Próximos Agendamentos</h4>
-        <div style={{ padding: '0.4rem', backgroundColor: 'rgba(0,0,0,0.03)', borderRadius: '8px', cursor: 'pointer', color: 'var(--text-muted)' }}>
-          <Filter size={18} />
-        </div>
       </div>
       
       {loading ? (

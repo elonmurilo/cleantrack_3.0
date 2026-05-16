@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Activity } from 'lucide-react';
+import { Activity, Plus } from 'lucide-react';
 import { monitoringService } from '../../services/monitoringService';
 import { MonitoringEventRow, MonitoringSummary as SummaryData } from '../../types/monitoring';
 import MonitoringSummary from '../../components/monitoring/MonitoringSummary';
 import SensorEventForm from '../../components/monitoring/SensorEventForm';
+import Button from '../../components/common/Button';
 import SensorEventList from '../../components/monitoring/SensorEventList';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -13,6 +14,7 @@ const MonitoringPage: React.FC = () => {
   const [activeServices, setActiveServices] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const loadData = useCallback(async () => {
     setIsLoading(true);
@@ -82,31 +84,39 @@ const MonitoringPage: React.FC = () => {
 
   return (
     <div className="page-container">
-      <header className="page-header" style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-        <div style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)', padding: '0.75rem', borderRadius: '8px', color: '#3b82f6' }}>
-          <Activity size={28} />
+      <header className="page-header" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)', padding: '0.75rem', borderRadius: '8px', color: '#3b82f6' }}>
+            <Activity size={28} />
+          </div>
+          <div>
+            <h1 style={{ fontSize: '1.75rem', fontWeight: 700, color: 'var(--text-dark)', margin: 0 }}>Monitoramento Inteligente</h1>
+            <p style={{ color: 'var(--text-muted)', margin: '0.25rem 0 0 0' }}>Acompanhe eventos de sensores e alertas em tempo real</p>
+          </div>
         </div>
-        <div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 700, color: 'var(--text-dark)', margin: 0 }}>Monitoramento Inteligente</h1>
-          <p style={{ color: 'var(--text-muted)', margin: '0.25rem 0 0 0' }}>Acompanhe eventos de sensores e alertas em tempo real</p>
+        
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <Button onClick={() => setIsModalOpen(true)} style={{ whiteSpace: 'nowrap' }}>
+            <Plus size={18} /> Novo Evento
+          </Button>
         </div>
       </header>
 
       <div className="page-content">
         <MonitoringSummary data={calculateSummary()} />
         
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }}>
-          <SensorEventForm 
-            activeServices={activeServices} 
-            onSubmit={handleCreateEvent} 
-            isLoading={isSubmitting || isLoading} 
-          />
-          
-          <div>
-            <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--text-dark)' }}>Últimos Eventos</h2>
-            <SensorEventList events={events} isLoading={isLoading} />
-          </div>
+        <div style={{ marginTop: '2rem' }}>
+          <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--text-dark)' }}>Últimos Eventos</h2>
+          <SensorEventList events={events} isLoading={isLoading} />
         </div>
+
+        <SensorEventForm 
+          activeServices={activeServices} 
+          onSubmit={handleCreateEvent} 
+          isLoading={isSubmitting || isLoading} 
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
       </div>
     </div>
   );
