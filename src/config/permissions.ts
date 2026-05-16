@@ -9,7 +9,8 @@ export type AppModule =
   | 'financeiro'
   | 'usuarios'
   | 'configuracoes'
-  | 'relatorios';
+  | 'relatorios'
+  | 'monitoramento';
 
 export const rolePermissions: Record<UserRole, AppModule[]> = {
   admin: [
@@ -21,7 +22,8 @@ export const rolePermissions: Record<UserRole, AppModule[]> = {
     'financeiro',
     'usuarios',
     'configuracoes',
-    'relatorios'
+    'relatorios',
+    'monitoramento'
   ],
   gestor: [
     'dashboard',
@@ -30,13 +32,15 @@ export const rolePermissions: Record<UserRole, AppModule[]> = {
     'servicos',
     'fotos',
     'financeiro',
-    'relatorios'
+    'relatorios',
+    'monitoramento'
   ],
   operador: [
     'clientes',
     'agendamentos',
     'servicos',
-    'fotos'
+    'fotos',
+    'monitoramento'
   ]
 };
 

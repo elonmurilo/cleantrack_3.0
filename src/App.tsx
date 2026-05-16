@@ -10,6 +10,7 @@ import FinancialPage from './pages/financial/FinancialPage';
 import UsersPage from './pages/UsersPage';
 import SettingsPage from './pages/SettingsPage';
 import ReportsPage from './pages/reports/ReportsPage';
+import MonitoringPage from './pages/monitoring/MonitoringPage';
 import AccessDenied from './pages/AccessDenied';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './routes/ProtectedRoute';
@@ -54,6 +55,7 @@ function App() {
                 <Route path="clientes" element={<Clients />} />
                 <Route path="agendamentos" element={<AppointmentsPage />} />
                 <Route path="servicos-realizados" element={<ServiceRecordsPage />} />
+                <Route path="monitoramento" element={<MonitoringPage />} />
               </Route>
             </Route>
           </Route>

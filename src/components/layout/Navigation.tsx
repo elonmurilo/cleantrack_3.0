@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, CalendarCheck, Briefcase, DollarSign, LogOut, Settings, UserCog, BarChart } from 'lucide-react';
+import { LayoutDashboard, Users, CalendarCheck, Briefcase, DollarSign, LogOut, Settings, UserCog, BarChart, Activity } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { hasPermission } from '../../config/permissions';
 
@@ -66,6 +66,17 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose, onLogout }) =>
                 onClick={onClose}
               >
                 <Briefcase size={20} /> Serviços
+              </NavLink>
+            </li>
+          )}
+          {hasPermission(role, 'monitoramento') && (
+            <li>
+              <NavLink 
+                to="/monitoramento" 
+                className={({ isActive }) => isActive ? 'active' : ''}
+                onClick={onClose}
+              >
+                <Activity size={20} /> Monitoramento
               </NavLink>
             </li>
           )}
